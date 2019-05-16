@@ -1,0 +1,198 @@
+{
+	"pages": [
+		{
+			"path" : "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"app-plus": {
+					"titleNView": {
+						"buttons":[
+							{
+								"text": "\ue56e",
+								"float" : "right",
+								"fontSrc": "/static/topBarIcon/user.ttf",
+								"fontSize" : "22px"
+							},
+							{
+								"text": "车商", 
+								"fontSize":"15",
+								"float": "left",
+								"color":"#fff"
+							}
+						]
+					}
+				}
+			}
+			
+		},
+		{
+		    "path" : "pages/login/login" 
+		},
+		{
+			"path" : "pages/vehicleSource/vehicleSource",
+			"style" : {
+				"navigationBarTitleText": "车辆管理"
+			}
+		},
+		{
+			"path": "pages/addCar/addCar",
+			"style":{
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"buttons": [ 
+							{
+								"text": "提交", 
+								"fontSize":"13",
+								"float": "right",
+								"color":"#fff"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+				"path" : "pages/me/me"
+		}
+        ,{
+            "path" : "pages/carBrand/carBrand",
+            "style" : {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "品牌车型",
+				"navigationBarBackgroundColor": "#108ee9",
+				"backgroundColor": "#F8F8F8"
+			}
+        }
+        ,{
+            "path" : "pages/addCarImg/addCarImg",
+            "style" : {
+				"navigationBarTitleText": "上传照片",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"buttons": [ 
+							{
+								"text": "提交", 
+								"fontSize":"13",
+								"float": "right",
+								"color":"#fff"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/wisdom/wisdom",
+            "style" : {
+            	"navigationBarTitleText": "智慧营销"
+            }
+        }
+        ,{
+            "path" : "pages/goodCars/goodCars",
+            "style" : {
+            	"navigationBarTitleText": "特价好车"
+            }
+        }
+        ,{
+            "path" : "pages/paiXu/paiXu",
+            "style" : {
+            	"navigationBarTitleText": "排序"
+            }
+        }
+        ,{
+            "path" : "pages/carState/carState",
+            "style" : {
+            	"navigationBarTitleText": "状态"
+            }
+        }
+        ,{
+            "path" : "pages/carPrice/carPrice",
+            "style" : {
+            	"navigationBarTitleText": "价格"
+            }
+        }
+        ,{
+            "path" : "pages/carInformation/carInformation",
+            "style": {
+            	"navigationBarTitleText": "车辆详情",
+            	"app-plus": {
+            		"titleNView": {
+            			"type": "transparent",
+						"buttons":[
+							{
+								"text": "\ue614",
+								"float" : "right",
+								"fontSrc": "/static/topBarIcon/iconfont.ttf",
+								"fontSize" : "22px"
+							}
+						]
+            		}
+            	}
+            }
+        }
+        ,{
+            "path" : "pages/statistics/statistics",
+            "style" : {
+            	"navigationBarTitleText": "数据统计"
+            }
+        }
+        ,{
+            "path" : "pages/carEndInfo/carEndInfo",
+            "style" : {
+				"navigationBarTitleText": "车辆详情"
+			}
+        }
+        ,{
+            "path" : "pages/longTimeCarInfo/longTimeCarInfo",
+            "style" : {
+				"navigationBarTitleText": "车辆详情"
+			}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "信车智联",
+		"navigationBarBackgroundColor": "#108ee9",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar":{
+		"color":"#909399",
+		"selectedColor":"#4682B4",
+		"borderStyle":"#108ee9",
+		"backgroundColor":"#FFFFFF",
+		"list":[
+			{
+				"pagePath":"pages/index/index",
+				"text":"首页",
+				"iconPath":"static/rabBar/index.png",
+				"selectedIconPath":"static/rabBar/indexActive.png"
+			},
+			{
+				"pagePath":"pages/goodCars/goodCars",
+				"text":"车源",
+				"iconPath":"static/rabBar/vehicleSource.png",
+				"selectedIconPath":"static/rabBar/vehicleSourceActive.png"
+			},
+			{
+				"pagePath":"pages/addCar/addCar",
+				"text":"录车",
+				"iconPath":"static/rabBar/recordCar.png",
+				"selectedIconPath":"static/rabBar/recordCarActive.png"
+			},
+			{
+			"pagePath":"pages/statistics/statistics",
+				"text":"统计",
+				"iconPath":"static/rabBar/statistics.png",
+				"selectedIconPath":"static/rabBar/statisticsActive.png"
+			},
+			{
+				"pagePath":"pages/me/me",
+				"text":"我的",
+				"iconPath":"static/rabBar/me.png",
+				"selectedIconPath":"static/rabBar/meActive.png"
+			}
+		]
+	}
+}
