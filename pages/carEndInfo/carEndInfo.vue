@@ -3,7 +3,6 @@
 		<view class="carEndInfoChildTop">
 			基本信息
 		</view>
-		<!-- manufacturerPrice -->
 		<view class="carEndInfoChild">
 			<text>品牌车系:</text><text>{{jiBenJi.manufacturer}}</text>
 		</view>
@@ -72,7 +71,8 @@
 			发动机信息
 		</view>
 		<view class="carEndInfoChild">
-			<text>排量({{ faDongJi.cylinderForm }}):</text><text>{{faDongJi.displacementL}}</text>
+			<!-- {{ faDongJi.cylinderForm }} -->
+			<text>排量:</text><text>{{faDongJi.displacement}}</text>
 		</view>
 		<view class="carEndInfoChild">
 			<text>缸体材料:</text><text>{{faDongJi.cylinderBlockMaterial}}</text>
@@ -178,6 +178,7 @@
 </template>
 
 <script>
+	import { getCarInfos } from '@/common/api/carEndInfo.js'
 	export default {
 		data() {
 			return {
@@ -202,54 +203,29 @@
 		},
 		methods: {
 			goLongTime(){
-				uni.navigateTo({
-					url: '../longTimeCarInfo/longTimeCarInfo?styleId='+this.styleId
-				});
+				this.$goWindow('../longTimeCarInfo/longTimeCarInfo?styleId='+this.styleId);
 			},
 			// 获取车辆详情基本信息
-			getCarInfo(){
-				uni.showLoading({
-					title: '正在加载请稍后',
-					mask: true
-				});
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {styleId:this.styleId};
-				this.$postRequest('/cars/GET_CAR_BASIC_INFO',params, (resData) => {
-					if(resData.data.code == 0){
-						var data = resData.data.body
+			async getCarInfo(){
+				this.$loading();
+				try{
+					let params = {id:this.styleId};
+					let resData = await getCarInfos(params)	
+					if(resData.code === 200){
+						var data = resData.result
 						this.faDongJi = data.发动机;
 						this.bianSuXiangJi = data.变速箱;
 						this.jiBenJi = data.基本参数;
 						this.cheShenJi = data.车身;
 						this.zhuanXiangJi = data.底盘转向;
 						this.cheLunZhiDong = data.车轮制动
-						uni.hideLoading()
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message);
 					}
-				})
+					uni.hideLoading()
+				}catch(e){
+					this.$toast('请求失败');
+				}
 			}
 		}
 	}
@@ -275,6 +251,7 @@
 }
 #carEndInfo{
 	width: 750upx;
+	box-sizing: border-box;
 }
 .carEndInfoChildTop{
 	width: 750upx;
@@ -287,22 +264,27 @@
 }
 .carEndInfoChild{
 	width: 750upx;
-	padding-left: 30upx;
+	padding: 0upx 30upx;
 	height: 70upx;
-	line-height: 70upx;
 	font-size: 26upx;
 	border-bottom: 1upx solid #E8E8E8;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	box-sizing: border-box;
 }
 .carEndInfoChild text:first-child{
 	color: #333333;
-	margin-right: 15upx;
+	padding-right: 15upx;
+	box-sizing: border-box;
 }
 .carEndInfoChild text:last-child{
-	width: 500upx;
+	/* width: 500upx; */
 	text-overflow: ellipsis;
 	overflow: hidden;
 	word-wrap: normal;
+	/* text-align: right; */
 	color: #909399;
 }
 </style>

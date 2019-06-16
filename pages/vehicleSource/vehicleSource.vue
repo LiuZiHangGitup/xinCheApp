@@ -99,7 +99,6 @@
 	background: #FFFFFF;
 	z-index: 2;
 	position: fixed;
-	top: 0;
 	left: 0;
 	right: 0;
 	display: flex;
@@ -123,21 +122,35 @@
 	margin-left: 10upx;
 	transition: 0.3s all ease;
 }
+.vehicleSourceBody-Item{
+	background-color: #E8E8E8;
+	width: 750upx;
+	height: 70upx;
+	line-height: 70upx;
+	font-size: 26upx;
+	padding-left: 30upx;
+	box-sizing: border-box;
+	position: fixed;
+	top: 70upx;
+	left: 0upx;
+	ight: 0upx;
+	z-index: 10;
+}
 </style>
 
 <template>
 	<view id="vehicleSource">
 		<view class="vehicleSourceTop">
-			<view class="vehicleSourceTopChild" @tap="goWindow('../paiXu/paiXu')">
+			<view class="vehicleSourceTopChild" @tap="$goWindow('../paiXu/paiXu')">
 				<text>{{ paiXu }}</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="goWindow('../carBrand/carBrand')">
+			<view class="vehicleSourceTopChild" @tap="$goWindow('../carBrand/carBrand')">
 				<text>品牌</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="goWindow('../carPrice/carPrice')">
+			<view class="vehicleSourceTopChild" @tap="$goWindow('../carPrice/carPrice')">
 				<text>价格</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="goWindow('../carState/carState')">
+			<view class="vehicleSourceTopChild" @tap="$goWindow('../carState/carState')">
 				<text>{{ carStateChoose }}</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
 			</view>
 			<view class="vehicleSourceTopChild" @tap="zwkf()">
@@ -145,7 +158,7 @@
 			</view>
 		</view>
 		<view class="vehicleSourceBody">
-			<view style="background-color: #E8E8E8;width: 750upx; height: 70upx; line-height: 70upx; font-size: 26upx; padding-left: 30upx; box-sizing: border-box; position: fixed; top: 70upx; left: 0upx; right: 0upx; z-index: 10;">
+			<view class="vehicleSourceBody-Item">
 				<text>共查出<text style="color:#F56C6C;">{{ allCarTotal }}</text>条数据</text>
 			</view>
 			<view class="carLists" v-for="(item,index) in carList" :key="index">
@@ -160,9 +173,9 @@
 					<view @click="chooseStateOpen(index)">
 						<button style="background-color: #409EFF !important; color: #FFFFFF;">{{ item.stateText }}</button>
 						<view :style="item.chooseStateStyle">
-							<text @click="setCarState(1)">已在库</text>
-							<text @click="setCarState(2)">已出售</text>
-							<text @click="setCarState(3)">已出库</text>
+							<text @tap="setCarState(item.id,0)">已在库</text>
+							<text @tap="setCarState(item.id,1)">已上架</text>
+							<text @tap="setCarState(item.id,2)">已出售</text>
 						</view>
 					</view>
 				</view>
@@ -175,6 +188,7 @@
 </template>
 
 <script>
+	import { getMeAllCars,upDateCarState } from '@/common/api/vehicleSource.js'
 	export default {
 		data() {
 			return {
@@ -182,8 +196,6 @@
 				retailPrice: '',
 				styleName: '',
 				state:'',
-				page:1,
-				rows:10,
 				oldorderNum:'',
 				oldretailPrice: '',
 				oldstyleName: '',
@@ -200,8 +212,8 @@
 					"styleName": "",
 					// 状态
 					"state": "",
-					"page": 1,
-					"rows": 10
+					"pageNum": 1,
+					"pageSize": 10
 				},
 				// 车辆总数量
 				allCarTotal:0,
@@ -238,35 +250,36 @@
 			// this.getAllCars();
 			this.paiXu = params.paiXu;
 			if(params.shangjia == 1){
-				this.state = params.shangjia;
+				this.goodCarData.state = params.shangjia;
+				console.log(this.state)
 				this.carStateChoose = '已上架';
 			}
 		},
 		methods: {
 			goInfo(paramsData){
-				uni.navigateTo({
-					url: '../carInformation/carInformation?carInfo='+ JSON.stringify(paramsData)
-				});
+				this.$goWindow('../carInformation/carInformation?id='+ paramsData.id)
 			},
 			// 暂未开放
 			zwkf(){
-				uni.showToast({
-					title: '暂未开放',
-					icon: 'none',
-					mask: false,
-					duration: 1500
-				});
+				this.$toast('暂未开放',false);
 			},
 			// 修改车辆状态
-			setCarState(index){
-				if(index == 1){
-					this.carState = '已在库';
-				}else if(index == 2){
-					this.carState = '已售出';
-				}else if(index == 3){
-					this.carState = '已出库';
+			async setCarState(id,index){
+				try{
+					this.$loading()
+					let params = {id:id,state:index};
+					let resData = await upDateCarState(params);
+					if(resData.code === 200){
+						this.goodCarData.pageNum = 1;
+						this.getAllCars();
+						this.$toast('修改成功');
+					}else{
+						this.$toast(resData.message);
+					}
+					uni.hideLoading();
+				}catch(e){
+					this.$toast('请求失败');
 				}
-				this.chooseStateOpen();
 			},
 			// 修改状态显示或关闭
 			chooseStateOpen(index){
@@ -276,79 +289,40 @@
 					this.carList[index].chooseStateStyle = 'opacity:1;z-index:2;';	
 				}
 			},
-			// 跳转页面
-			goWindow(url){
-				uni.navigateTo({
-					url: url
-				});
-			},
-			// 获取特价好车
-			getAllCars(){
-				if(this.ifHaveGoodCar == '已经是全部数据了'){
+			// 获取车辆列表
+			async getAllCars(){
+				if(this.ifHaveGoodCar == '已经是全部数据了' && this.goodCarData.pageNum != 1){
 					this.ifHaveGoodCar = '已经是全部数据了';
 				}else{
-					this.ifHaveGoodCar = '正在加载...';
-					var params = {
-						headData:{
-							token:'',
-							uuid:''
-						},
-						bodyData:{}
-					}
-					uni.getStorage({
-						key: 'token',
-						success: (res) => {
-							params.headData.token = res.data;
-						}
-					})
-					uni.getStorage({
-						key:'uuid',
-						success: (res) => {
-							params.headData.uuid = res.data;
-						}
-					})
-					uni.showLoading({
-						title: '正在加载',
-						mask: true
-					});
-					params.bodyData = {
-						// 排序
-						"orderNum": this.orderNum,
-						// 价格区间
-						"retailPrice": this.retailPrice,
-						// 车型
-						"styleName": this.styleName,
-						// 状态
-						"state": this.state,
-						"page": this.page,
-						"rows": this.rows
-					};
-					this.$postRequest('/cars/GET_CAR_ALL',params, (resData) => {
-						this.allCarTotal = resData.data.body.total;
-						if(resData.data.body.rows.length == 0){
+					try{
+						this.ifHaveGoodCar = '正在加载...';
+						this.$loading();
+						let resData = await getMeAllCars(this.goodCarData);
+						this.allCarTotal = resData.result.total;
+						if(resData.result.list.length == 0){
 							this.carList = [];
 							this.ifHaveGoodCar = '已经是全部数据了'
 							uni.hideLoading();
 							return;
 						}
-						if(resData.data.code == 0){
-							for(let i in resData.data.body.rows){
-								resData.data.body.rows[i].chooseStateStyle = 'opacity:0;z-index:-10;';
-								resData.data.body.rows[i].coverUrl = resData.data.body.rows[i].coverUrl.split(',');
-								if(resData.data.body.rows[i].state == 0){
-									resData.data.body.rows[i].stateText = '已在库';
-								}else if(resData.data.body.rows[i].state == 1){
-									resData.data.body.rows[i].stateText = '已上架';
-								}else if(resData.data.body.rows[i].state == 2){
-									resData.data.body.rows[i].stateText = '已售出';
+						if(resData.code === 200){
+							for(let i in resData.result.list){
+								resData.result.list[i].chooseStateStyle = 'opacity:0;z-index:-10;';
+								resData.result.list[i].coverUrl = resData.result.list[i].coverUrl.split(',');
+								if(resData.result.list[i].state == 0){
+									resData.result.list[i].stateText = '已在库';
+								}else if(resData.result.list[i].state == 1){
+									resData.result.list[i].stateText = '已上架';
+								}else if(resData.result.list[i].state == 2){
+									resData.result.list[i].stateText = '已售出';
 								}
-								if(i == resData.data.body.rows.length - 1){
-									if(this.page == 1){
-										this.carList = resData.data.body.rows;
+								if(i == resData.result.list.length - 1){
+									if(this.goodCarData.pageNum == 1){
+										this.carList = resData.result.list;
 									}else{
-										this.carList = this.carList.concat(resData.data.body.rows);
+										this.carList = this.carList.concat(resData.result.list);
 									}
-									if(this.carList.length == resData.data.body.total){
+									if(resData.result.hasNextPage == false){
 										this.ifHaveGoodCar = '已经是全部数据了';
 									}else{
 										this.ifHaveGoodCar = '上拉加载';
@@ -357,20 +331,18 @@
 								}
 							}
 						}else{
-							uni.showToast({
-								title: resData.data.msg,
-								mask: false,
-								icon: 'none',
-								duration: 1500
-							});
+							this.$toast(resData.message);
 						}
-					})
+						uni.hideLoading();
+					}catch(e){
+						this.$toast('请求失败');
+					}
 				}
 			},
 		},
-		// 上滑加载特价好车列表
+		// 上滑加载车辆列表
 		onReachBottom(){
-			this.page++;
+			this.goodCarData.pageNum++;
 			this.getAllCars();
 		}
 	}

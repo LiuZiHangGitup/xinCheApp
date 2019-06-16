@@ -10,7 +10,9 @@
 	padding: 20upx 0;
 	background-color: #FFFFFF;
 	border-bottom: 10upx solid #f3f3f3;
-	
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 .carListsLeft{
 	width: 45%;
@@ -101,15 +103,15 @@
 	display: flex;
 	justify-content: space-around;
 	border-bottom: 1upx solid #E8E8E8;
+	z-index: 99;
 }
 .vehicleSourceTopLeftChooseChild{
-	text-align: center;
-	line-height: 50upx;
+	text-align: center;	
 	font-size: 26upx;
 	width: 150upx;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: nowrap; 
 }
 .vehicleSourceTopLeftChooseChildInput{
 	width: 190upx;
@@ -287,89 +289,275 @@
 <template>
 	<view id="vehicleSource">
 		<view class="vehicleSourceTop">
-			<view class="vehicleSourceTopLeft" :class="vehicleSourceTopLeftClass" @click="openXinChe()">新车</view>
+			<view 
+				class="vehicleSourceTopLeft" 
+				:class="vehicleSourceTopLeftClass" 
+				@click="openXinChe()">新车</view>
 			<view class="vehicleSourceTopRight" :class="vehicleSourceTopRightClass" @click="openErShouChe()">二手车</view>
 		</view>
 		<view class="vehicleSourceTopLeftChoose" v-if="erOrXin">
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openXinPinPai()">{{ pinPai }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openXinCheXing()">{{ xinCheXing }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openXinJiaGe()">{{ jiaGe }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openXinPaiXu()">{{ paiXu }}</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openXinPinPai()"
+			>{{ pinPai }}
+			</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openXinCheXing()"
+			>{{ xinCheXing }}
+			</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openXinJiaGe()"
+			>{{ jiaGe }}
+			</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openXinPaiXu()"
+			>{{ paiXu }}</view>
 			<!-- <view class="vehicleSourceTopLeftChooseChild">
 				<input class="vehicleSourceTopLeftChooseChildInput" type="text" value="" />
 			</view> -->
 		</view>
 		<!-- 二手车选择器 -->
-		<view class="vehicleSourceTopLeftChoose" v-else>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openLaiYuan()">{{ cheYuan }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openErPinPai()">{{ pinPai2 }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openErCheXing()">{{ erCheXing }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openErJiaGe()">{{ jiaGe2 }}</view>
-			<view class="vehicleSourceTopLeftChooseChild" @tap="openErPaiXu()">{{ paiXu2 }}</view>
+		<view 
+			class="vehicleSourceTopLeftChoose" 
+			v-else>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openLaiYuan()"
+			>{{ cheYuan }}
+		</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openErPinPai()"
+			>{{ pinPai2 }}
+			</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openErCheXing()"
+			>{{ erCheXing }}
+			</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openErJiaGe()"
+			>{{ jiaGe2 }}
+			</view>
+			<view 
+				class="vehicleSourceTopLeftChooseChild" 
+				@tap="openErPaiXu()"
+			>{{ paiXu2 }}
+			</view>
 			<!-- <view class="vehicleSourceTopLeftChooseChild">
 				<input class="vehicleSourceTopLeftChooseChildInput2" type="text" value="" />
 			</view> -->
 		</view>
 		<!-- 来源选择器 -->
-		<view class="laiYuanBg chooseBg" v-if="laiYuanState" @touchmove.stop.prevent="moveHandle" @tap="openLaiYuan()"></view>
-		<view class="xuanZeQi laiYuan" :style="laiYuanStyle" @touchmove.stop.prevent="moveHandle">
-			<scroll-view scroll-y class="laiYuanScorll uni-center center-box">
-				<view class="laiYuanScorllChild" @tap="getLaiYuan('','全部车源')">全部车源</view>
-				<view class="laiYuanScorllChild" @tap="getLaiYuan(0,'批发车源')">批发车源</view>
-				<view class="laiYuanScorllChild" @tap="getLaiYuan(1,'好友车源')">好友车源</view>
-				<view class="laiYuanScorllChild" @tap="getLaiYuan(2,'车行认证')">车行认证</view>
-				<view class="laiYuanScorllChild" @tap="getLaiYuan(3,'个人车源')">个人车源</view>
-				<view class="laiYuanScorllChild" @tap="getLaiYuan(4,'拍卖车源')">拍卖车源</view>
+		<view 
+			class="laiYuanBg chooseBg" 
+			v-if="laiYuanState" 
+			@touchmove.stop.prevent="moveHandle" 
+			@tap="openLaiYuan()"
+		></view>
+		<view 
+			class="xuanZeQi laiYuan" 
+			:style="laiYuanStyle" 
+			@touchmove.stop.prevent="moveHandle">
+			<scroll-view 
+				scroll-y 
+				class="laiYuanScorll uni-center center-box">
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getLaiYuan('','全部车源')">全部车源</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getLaiYuan(0,'批发车源')"
+				>批发车源</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getLaiYuan(1,'好友车源')"
+				>好友车源</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getLaiYuan(2,'车行认证')"
+				>车行认证</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getLaiYuan(3,'个人车源')"
+				>个人车源</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getLaiYuan(4,'拍卖车源')"
+				>拍卖车源</view>
 			</scroll-view>
 		</view>
 		<!-- 二手车价格选择器 -->
-		<view class="chooseBg erJiaGeBg" v-if="erJiaGeState" @touchmove.stop.prevent="moveHandle" @tap="openErJiaGe()"></view>
-		<view class="xuanZeQi erJiaGe" :style="erJiaGeStyle" @touchmove.stop.prevent="moveHandle">
-			<scroll-view :scroll-y="true" class="laiYuanScorll uni-center center-box">
-				<view class="laiYuanScorllChild" @tap="getErPrice('','全部价格')">全部价格</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(0,'3万及以下')">3万及以下</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(1,'3-5万')">3-5万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(2,'5-8万')">5-8万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(3,'8-10万')">8-10万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(4,'10-15万')">10-15万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(5,'15-30万')">15-30万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(6,'30-50万')">30-50万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(7,'50-100万')">50-100万</view>
-				<view class="laiYuanScorllChild" @tap="getErPrice(8,'100万及以上')">100万及以上</view>
+		<view 
+			class="chooseBg erJiaGeBg" 
+			v-if="erJiaGeState" 
+			@touchmove.stop.prevent="moveHandle" 
+			@tap="openErJiaGe()"
+		></view>
+		<view 
+			class="xuanZeQi erJiaGe" 
+			:style="erJiaGeStyle" 
+			@touchmove.stop.prevent="moveHandle">
+			<scroll-view 
+				:scroll-y="true" 
+				class="laiYuanScorll uni-center center-box">
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice('','全部价格')"
+				>全部价格
+				</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(0,'3万及以下')"
+				>3万及以下
+				</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(1,'3-5万')"
+				>3-5万
+				</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(2,'5-8万')"
+				>5-8万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(3,'8-10万')"
+				>8-10万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(4,'10-15万')"
+				>10-15万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(5,'15-30万')"
+				>15-30万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(6,'30-50万')"
+				>30-50万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(7,'50-100万')"
+				>50-100万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPrice(8,'100万及以上')"
+				>100万及以上</view>
 			</scroll-view>
 		</view>
 		<!-- 二手车排序选择器 -->
-		<view class="chooseBg erPaiXuBg" v-if="erPaiXuState" @touchmove.stop.prevent="moveHandle" @tap="openErPaiXu()"></view>
-		<view class="xuanZeQi erPaiXu" :style="erPaiXuStyle" @touchmove.stop.prevent="moveHandle">
-			<scroll-view :scroll-y="true" class="laiYuanScorll uni-center center-box">
-				<view class="laiYuanScorllChild" @tap="getErPaiXu(0,'价格最低')">价格最低</view>
-				<view class="laiYuanScorllChild" @tap="getErPaiXu(1,'价格最高')">价格最高</view>
-				<view class="laiYuanScorllChild" @tap="getErPaiXu(2,'车龄最短')">车龄最短</view>
-				<view class="laiYuanScorllChild" @tap="getErPaiXu(3,'里程最小')">里程最小</view>
+		<view 
+			class="chooseBg erPaiXuBg" 
+			v-if="erPaiXuState" 
+			@touchmove.stop.prevent="moveHandle" 
+			@tap="openErPaiXu()">
+		</view>
+		<view 
+			class="xuanZeQi erPaiXu" 
+			:style="erPaiXuStyle" 
+			@touchmove.stop.prevent="moveHandle">
+			<scroll-view 
+				:scroll-y="true" 
+				class="laiYuanScorll uni-center center-box">
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPaiXu(1,'价格最低')"
+				>价格最低</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPaiXu(2,'价格最高')"
+				>价格最高</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPaiXu(3,'车龄最短')"
+				>车龄最短</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getErPaiXu(4,'里程最小')"
+				>里程最小</view>
 			</scroll-view>
 		</view>
 		<!-- 新车排序选择器 -->
-		<view class="chooseBg xinPaiXuBg" v-if="xinPaiXuState" @touchmove.stop.prevent="moveHandle" @tap="openXinPaiXu()"></view>
-		<view class="xuanZeQi xinPaiXu" :style="xinPaiXuStyle" @touchmove.stop.prevent="moveHandle">
-			<scroll-view :scroll-y="true" class="laiYuanScorll uni-center center-box">
-				<view class="laiYuanScorllChild" @tap="getXinPaiXu(0,'价格最低')">价格最低</view>
-				<view class="laiYuanScorllChild" @tap="getXinPaiXu(1,'价格最高')">价格最高</view>
+		<view 
+			class="chooseBg xinPaiXuBg" 
+			v-if="xinPaiXuState" 
+			@touchmove.stop.prevent="moveHandle" 
+			@tap="openXinPaiXu()"></view>
+		<view 
+			class="xuanZeQi xinPaiXu" 
+			:style="xinPaiXuStyle" 
+			@touchmove.stop.prevent="moveHandle">
+			<scroll-view 
+				:scroll-y="true" 
+				class="laiYuanScorll uni-center center-box">
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPaiXu(1,'价格最低')"
+				>价格最低</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPaiXu(2,'价格最高')"
+				>价格最高</view>
 			</scroll-view>
 		</view>
 		<!-- 新车价格选择器 -->
-		<view class="chooseBg erJiaGeBg" v-if="xinJiaGeState" @touchmove.stop.prevent="moveHandle" @tap="openXinJiaGe()"></view>
-		<view class="xuanZeQi erJiaGe" :style="xinJiaGeStyle" @touchmove.stop.prevent="moveHandle">
-			<scroll-view :scroll-y="true" class="laiYuanScorll uni-center center-box">
-				<view class="laiYuanScorllChild" @tap="getXinPrice('','全部价格')">全部价格</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(0,'3万及以下')">3万及以下</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(1,'3-5万')">3-5万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(2,'5-8万')">5-8万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(3,'8-10万')">8-10万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(4,'10-15万')">10-15万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(5,'15-30万')">15-30万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(6,'30-50万')">30-50万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(7,'50-100万')">50-100万</view>
-				<view class="laiYuanScorllChild" @tap="getXinPrice(8,'100万及以上')">100万及以上</view>
+		<view 
+			class="chooseBg erJiaGeBg" 
+			v-if="xinJiaGeState" 
+			@touchmove.stop.prevent="moveHandle" 
+			@tap="openXinJiaGe()"></view>
+		<view 
+			class="xuanZeQi erJiaGe" 
+			:style="xinJiaGeStyle" 
+			@touchmove.stop.prevent="moveHandle">
+			<scroll-view 
+				:scroll-y="true" 
+				class="laiYuanScorll uni-center center-box">
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice('','全部价格')"
+				>全部价格</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(0,'3万及以下')"
+				>3万及以下</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(1,'3-5万')"
+				>3-5万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(2,'5-8万')"
+				>5-8万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(3,'8-10万')"
+				>8-10万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(4,'10-15万')"
+				>10-15万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(5,'15-30万')"
+				>15-30万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(6,'30-50万')"
+				>30-50万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(7,'50-100万')"
+				>50-100万</view>
+				<view 
+					class="laiYuanScorllChild" 
+					@tap="getXinPrice(8,'100万及以上')"
+				>100万及以上</view>
 			</scroll-view>
 		</view>
 		<!-- 二手车车选择器 -->
@@ -402,18 +590,23 @@
 		<view class="page" :style="xinPinPaiStyle">
 			<scroll-view class="scrollList" scroll-y :scroll-into-view="scrollViewId" :style="{height:winHeight + 'px'}">
 				<view class="uni-list">
-					<block v-for="(list, key) in lists" :key="key">
+					<block v-for="(list, key) in lists" :key="list">
 						<block v-if="list.data.length">
 							<view class="uni-list-cell-divider" :id="list.letter">
-								{{list.letter}}
+								{{ list.letter }}
 							</view>
 							<view class="one">
 								<view class="oneChild" @tap="getXinChePinPai({carName:'全部品牌'})">
 									全部品牌
 								</view>
 							</view>
-							<view class="one" v-for="(carname,index) in list.data" :key="index" :class="list.data.length -1 == index ? 'uni-list-cell-last' : ''">
-								<view class="oneChild" @tap="getXinChePinPai({carName:carname})">
+							<view class="one" 
+								v-for="(carname,index) in list.data" 
+								:key="carname" 
+								:class="list.data.length -1 == index ? 'uni-list-cell-last' : ''">
+								<view 
+									class="oneChild" 
+									@tap="getXinChePinPai({carName:carname})">
 									{{carname}}
 								</view>
 							</view>
@@ -421,29 +614,59 @@
 					</block>
 				</view>
 			</scroll-view>
-			<view class="uni-indexed-list-bar" :class="touchmove ? 'active' : ''" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" @touchcancel="touchCancel" :style="{height:winHeight + 'px'}">
-				<text v-for="(list,key) in lists" :key="key" class="uni-indexed-list-text" :class="touchmoveIndex == key ? 'active' : ''" :style="{height:itemHeight + 'px',lineHeight:itemHeight + 'px'}">{{list.letter}}</text>
+			<view 
+				class="uni-indexed-list-bar" 
+				:class="touchmove ? 'active' : ''" 
+				@touchstart="touchStart" 
+				@touchmove="touchMove" 
+				@touchend="touchEnd" 
+				@touchcancel="touchCancel" 
+				:style="{height:winHeight + 'px'}">
+				<text 
+					v-for="(list,key) in lists" 
+					:key="key" 
+					class="uni-indexed-list-text" 
+					:class="touchmoveIndex == key ? 'active' : ''" 
+					:style="{height:itemHeight + 'px',lineHeight:itemHeight + 'px'}">{{list.letter}}</text>
 			</view>
-			<view class="uni-indexed-list-alert" v-if="touchmove">
+			<view 
+				class="uni-indexed-list-alert" 
+				v-if="touchmove">
 				{{lists[touchmoveIndex].letter}}
 			</view>
 		</view>
 		<!-- 二手车品牌选择器 -->
 		<!-- <view class="chooseBg erJiaGeBg" v-if="xinJiaGeState" @touchmove.stop.prevent="moveHandle" @tap="openXinJiaGe()"></view> -->
-		<view class="page" :style="erPinPaiStyle">
-			<scroll-view class="scrollList" scroll-y :scroll-into-view="scrollViewId" :style="{height:winHeight + 'px'}">
+		<view 
+			class="page" 
+			:style="erPinPaiStyle">
+			<scroll-view 
+				class="scrollList" 
+				scroll-y 
+				:scroll-into-view="scrollViewId" 
+				:style="{height:winHeight + 'px'}">
 				<view class="uni-list">
-					<block v-for="(list, key) in lists" :key="key">
+					<block 
+						v-for="(list, key) in lists" 
+						:key="list">
 						<block v-if="list.data.length">
-							<view class="uni-list-cell-divider" :id="list.letter">
+							<view 
+								class="uni-list-cell-divider" 
+								:id="list.letter">
 								{{list.letter}}
 							</view>
 							<view class="one">
-								<view class="oneChild" @tap="getErChePinPai({carName:'全部品牌'})">
+								<view 
+									class="oneChild" 
+									@tap="getErChePinPai({carName:'全部品牌'})">
 									全部品牌
 								</view>
 							</view>
-							<view class="one" v-for="(carname,index) in list.data" :key="index" :class="list.data.length -1 == index ? 'uni-list-cell-last' : ''">
+							<view 
+								class="one" 
+								v-for="(carname,index) in list.data" 
+								:key="carname" 
+								:class="list.data.length -1 == index ? 'uni-list-cell-last' : ''">
 								<view class="oneChild" @tap="getErChePinPai({carName:carname})">
 									{{carname}}
 								</view>
@@ -452,18 +675,31 @@
 					</block>
 				</view>
 			</scroll-view>
-			<view class="uni-indexed-list-bar" :class="touchmove ? 'active' : ''" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" @touchcancel="touchCancel" :style="{height:winHeight + 'px'}">
-				<text v-for="(list,key) in lists" :key="key" class="uni-indexed-list-text" :class="touchmoveIndex == key ? 'active' : ''" :style="{height:itemHeight + 'px',lineHeight:itemHeight + 'px'}">{{list.letter}}</text>
+			<view 
+				class="uni-indexed-list-bar" 
+				:class="touchmove ? 'active' : ''" 
+				@touchstart="touchStart" 
+				@touchmove="touchMove" 
+				@touchend="touchEnd" 
+				@touchcancel="touchCancel" 
+				:style="{height:winHeight + 'px'}">
+				<text 
+					v-for="(list,key) in lists" 
+					:key="key" 
+					class="uni-indexed-list-text" 
+					:class="touchmoveIndex == key ? 'active' : ''" 
+					:style="{height:itemHeight + 'px',lineHeight:itemHeight + 'px'}">{{list.letter}}</text>
 			</view>
-			<view class="uni-indexed-list-alert" v-if="touchmove">
+			<view 
+				class="uni-indexed-list-alert" 
+				v-if="touchmove">
 				{{lists[touchmoveIndex].letter}}
 			</view>
 		</view>
 		<view class="vehicleSourceBody">
-			 <!-- " -->
 			<view class="carLists" v-for="(item,index) in goodCarList" :key="index">
 				<view class="carListsLeft">
-					<image @tap="goInfo()" :src="item.carImg"></image>
+					<image @tap="goInfo(item.id)" :src="item.carImg"></image>
 				</view>
 				<view class="carListsRight">
 					<text>{{item.carTitle}}</text>
@@ -479,9 +715,12 @@
 </template>
 
 <script>
+	import { getGoodCar,getBrand,getXinCheXings } from '@/common/api/goodCar.js'
 	export default {
 		data() {
 			return {
+				// 右侧ABCD
+				cheXingState:'#',
 				// 查询特价好车所需条件
 				goodCarData: {
 					"audiId": "",
@@ -489,125 +728,12 @@
 					"carPrice":null,
 					"carYear":null,
 					"dataSources": "",	
-					"page": 1,
+					"pageNum": 1,
 					"paixu": "",
-					"rows": 10,
+					"pageSize": 10,
 					"state": "0",
 					"brandName": "",
 					"audiName" : ""
-				},
-				jiaJson:{
-					acquiredAt: null,
-					acquirerId: null,
-					acquisitionPriceCents: null,
-					acquisitionType: null,
-					age: null,
-					allianceCoverUrl: null,
-					allianceMinimunPriceCents: null,
-					allowedMortgage: false,
-					areaId: 413,
-					areaName: "f-6",
-					attachments: "{}",
-					brandName: "阿尔法·罗密欧",
-					businessInsuranceDate: null,
-					carType: null,
-					channelId: null,
-					closingCostCents: null,
-					companyId: null,
-					configurationNote: null,
-					consignorName: null,
-					consignorPhone: null,
-					consignorPriceCents: null,
-					coverUrl: ["http://47.105.165.101:8080/img/2019051321230272790717.png","http://47.105.165.101:8080/img/2019051321230554480041.png","http://47.105.165.101:8080/img/2019051321230739269263.png"],
-					createdAt: "2019-05-13 21:24:35",
-					currentPlateNumber: null,
-					currentPublishRecordsCount: 0,
-					deletedAt: null,
-					displacement: null,
-					doorCount: null,
-					emissionStandard: null,
-					estimatePriceCents: null,
-					estimatedGrossProfitCents: null,
-					estimatedGrossProfitRate: 0,
-					exteriorColor: "black",
-					feeDetail: null,
-					forceInsuranceDate: "1990-01",
-					fuelType: null,
-					hasMaintainHistory: false,
-					id: 124,
-					imagesCount: 0,
-					imported: null,
-					interiorColor: "double",
-					interiorNote: null,
-					isBitePrice: null,
-					isFaceToFace: "1",
-					isRegularMaintenance: "1",
-					isSpecialOffer: null,
-					isTransfer: null,
-					isTurboCharger: "0",
-					isWholesale: null,
-					keyNum: null,
-					level: null,
-					licenseInfo: "unlicensed",
-					licensedAt: null,
-					loanBillId: null,
-					loanStatus: null,
-					maintainMileage: 0,
-					managerPriceCents: null,
-					manufacturedAt: null,
-					manufacturerConfiguration: null,
-					manufacturerName: null,
-					marketId: 12,
-					mileage: 15,
-					mileageInFact: 0,
-					mortgageNote: null,
-					name: null,
-					namePinyin: null,
-					nature: "1",
-					newCarAdditionalPriceCents: null,
-					newCarDiscount: 0,
-					newCarFinalPriceCents: null,
-					newCarGuidePriceCents: null,
-					newCarWarranty: null,
-					onlinePriceCents: null,
-					onsale: false,
-					onsaleDescription: null,
-					onsalePriceCents: null,
-					personalEquipment: "{}",
-					predictedRestockedAt: null,
-					redStockWarningDays: 45,
-					relationId: null,
-					reserved: false,
-					reservedAt: null,
-					sellable: false,
-					sellerId: null,
-					sellingPoint: null,
-					seriesName: "ALFA 156",
-					shopId: 47,
-					showPriceCents: null,
-					standardEquipment: "{}",
-					starRating: 0,
-					state: "0",
-					stateChangedAt: null,
-					stateNote: null,
-					statesStatistic: "{}",
-					stockAgeDays: 0,
-					stockNumber: null,
-					stockOutAt: null,
-					styleId: 165,
-					styleName: "2004款 2.0 AT",
-					systemName: null,
-					t: 0,
-					tradeNum: null,
-					tradePrice: null,
-					transferNum: null,
-					transmission: "manual",
-					updatedAt: "2019-05-13 21:24:35",
-					validateDate: "1990-01",
-					vin: "15242515425124512",
-					warrantyFeeCents: null,
-					warrantyId: null,
-					yellowStockWarningDays: 30,
 				},
 				// 品牌
 				pinPai: '品牌',
@@ -682,7 +808,7 @@
 				// 二手车车型List
 				erCheXingList:[],
 				title: 'grid',
-				lists: [],
+				lists: new Array(),
 				touchmove: false,
 				touchmoveIndex: -1,
 				itemHeight: 0,
@@ -693,20 +819,18 @@
 			}
 		},
 		onLoad(params) {
-			let winHeight = uni.getSystemInfoSync().windowHeight;
-			this.itemHeight = winHeight / 26;
-			this.winHeight = winHeight;
+			let winHeights = uni.getSystemInfoSync().windowHeight;
+			this.itemHeight = winHeights / 26;
+			this.winHeight = winHeights;
 			// 获取特价好车列表
-			this.getGoodCar();
+			this.getGoodCars();
 			// 获取所有品牌
 			this.getCarBrand();
 		},
 		methods: {
 			// 车辆详情
-			goInfo(){
-				uni.navigateTo({
-					url: '../carInformation/carInformation?carInfo='+JSON.stringify(this.jiaJson)
-				});
+			goInfo(id){
+				this.$goWindow('../goodCarDetail/goodCarDetail?id='+id)
 			},
 			// 二手车车型查找
 			setErCheXing(carName){
@@ -715,9 +839,9 @@
 				}else{
 					this.erCheXing = carName;
 				}
-				this.goodCarData.audiName = carName;
-				this.goodCarData.page = 1;
-				this.getGoodCar();
+				this.goodCarData.audiId = carName;
+				this.goodCarData.pageNum = 1;
+				this.getGoodCars();
 				this.openErCheXing();
 			},
 			// 新车车型查找
@@ -727,135 +851,84 @@
 				}else{
 					this.xinCheXing = carName;
 				}
-				this.goodCarData.audiName = carName;
-				this.goodCarData.page = 1;
-				this.getGoodCar();
+				this.goodCarData.audiId = carName;
+				this.goodCarData.pageNum = 1;
+				this.getGoodCars();
 				this.openXinCheXing();
 			},
 			// 获取二手车车型
-			getErCheXing(carName){
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {brandName:carName.carName};
-				uni.showLoading({
-					title: '加载中请稍后',
-					mask: true
-				});
-				this.$postRequest('/carAudi/SELECT_BY_BRAND',params,(resData)=>{
-					uni.hideLoading();
-					// 获取品牌数据成功
-					if(resData.data.code == 0){
-						this.erCheXingList = resData.data.body;
+			async getErCheXing(carName){
+				this.$loading();
+				try{
+					let resData = await getXinCheXings({brandId:carName.carName})
+					if(resData.code == 200){
+						this.erCheXingList = resData.result;
 						this.ifShowErCheXing = false;
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							icon: 'none',
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message);
+						uni.hideLoading();
 					}
-					
-				})
+				}catch(e){
+					this.$toast('请求失败');
+					uni.hideLoading();
+				}
 			},
 			// 获取新车车型
-			getXinCheXing(carName){
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {brandName:carName.carName};
-				uni.showLoading({
-					title: '加载中请稍后',
-					mask: true
-				});
-				this.$postRequest('/carAudi/SELECT_BY_BRAND',params,(resData)=>{
-					uni.hideLoading();
+			async getXinCheXing(carName){
+				this.$loading();
+				try{
+					let resData = await getXinCheXings({brandId:carName.carName})
 					// 获取品牌数据成功
-					if(resData.data.code == 0){
-						this.xinCheXingList = resData.data.body;
+					if(resData.code == 200){
+						this.xinCheXingList = resData.result;
 						this.ifShowXinCheXing = false;
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							icon: 'none',
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message);
+						uni.hideLoading();
 					}
-					
-				})
+				}catch(e){
+					this.$toast('请求失败');
+					uni.hideLoading();
+				}
 			},
 			// 二手车来源查找
 			getLaiYuan(params,name){
 				this.goodCarData.dataSources = params;
 				this.cheYuan = name;
-				this.goodCarData.page = 1;
-				this.getGoodCar();
+				this.goodCarData.pageNum = 1;
+				this.getGoodCars();
 				this.openLaiYuan();
 			},
 			// 查找二手车排序
 			getErPaiXu(params,name){
 				this.goodCarData.paixu = params;
-				this.goodCarData.page = 1;
+				this.goodCarData.pageNum = 1;
 				this.paiXu2 = name;
-				this.getGoodCar();
+				this.getGoodCars();
 				this.openErPaiXu();
 			},
 			// 查找新车排序
 			getXinPaiXu(params,name){
 				this.goodCarData.paixu = params;
-				this.goodCarData.page = 1;
+				this.goodCarData.pageNum = 1;
 				this.paiXu = name;
-				this.getGoodCar();
+				this.getGoodCars();
 				this.openXinPaiXu();
 			},
 			// 查找二手车价格
 			getErPrice(params,name){
 				this.goodCarData.carPrice = params;
-				this.goodCarData.page = 1;
+				this.goodCarData.pageNum = 1;
 				this.jiaGe2 = name;
-				this.getGoodCar();
+				this.getGoodCars();
 				this.openErJiaGe();
 			},
 			// 查找新车价格
 			getXinPrice(params,name){
 				this.goodCarData.carPrice = params;
-				this.goodCarData.page = 1;
+				this.goodCarData.pageNum = 1;
 				this.jiaGe = name;
-				this.getGoodCar();
+				this.getGoodCars();
 				this.openXinJiaGe();
 			},
 			// 查找二手车品牌
@@ -869,11 +942,11 @@
 					this.pinPai2 = params.carName;
 					this.getErCheXing({carName:params.carName});
 				}
-				this.goodCarData.brandName = params.carName;
-				this.goodCarData.audiName = '';
+				this.goodCarData.brandId = params.carName;
+				this.goodCarData.audiId = '';
 				this.erCheXing = '车型';
-				this.goodCarData.page = 1;
-				this.getGoodCar();
+				this.goodCarData.pageNum = 1;
+				this.getGoodCars();
 				this.openErPinPai();
 			},
 			// 查找新车品牌
@@ -887,11 +960,11 @@
 					this.pinPai = params.carName;
 					this.getXinCheXing({carName:params.carName});
 				}
-				this.goodCarData.brandName = params.carName;
-				this.goodCarData.audiName = '';
+				this.goodCarData.brandId = params.carName;
+				this.goodCarData.audiId = '';
 				this.xinCheXing = '车型';
-				this.goodCarData.page = 1;
-				this.getGoodCar();
+				this.goodCarData.pageNum = 1;
+				this.getGoodCars();
 				this.openXinPinPai();
 			},
 			// 查找二手车
@@ -903,13 +976,13 @@
 						"carPrice":null,
 						"carYear":null,
 						"dataSources": "",	
-						"page": 1,
+						"pageNum": 1,
 						"paixu": "",
-						"rows": 10,
+						"pageSize": 10,
 						"state": "1",
 						"brandName": ""
 					}
-					this.getGoodCar();
+					this.getGoodCars();
 					this.pinPai2 = '品牌';
 					this.cheYuan = '车源';
 					this.jiaGe2 = '价格';
@@ -927,13 +1000,13 @@
 						"carPrice":null,
 						"carYear":null,
 						"dataSources": "",	
-						"page": 1,
+						"pageNum": 1,
 						"paixu": "",
-						"rows": 10,
+						"pageSize": 10,
 						"state": "0",
 						"brandName": ""
 					}
-					this.getGoodCar();
+					this.getGoodCars();
 					this.pinPai = '品牌';
 					this.jiaGe = '价格';
 					this.paiXu = '排序';
@@ -1153,120 +1226,83 @@
 				this.xinCheXingStyle = 'transform: scaleY(0);';	
 			},
 			// 获取特价好车
-			getGoodCar(){
-				this.ifHaveGoodCar = '正在加载...';
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = this.goodCarData;
-				this.$postRequest('/specialCar/SELECT_BY_MANY',params, (resData) => {
-					if(this.ifHaveGoodCar == '已经是全部数据了' && this.oldGoodCarData == this.goodCarData){
-						this.ifHaveGoodCar = '已经是全部数据了';
-					}else if(this.goodCarList == resData.data.body.total && this.oldGoodCarData == this.goodCarData){
+			async getGoodCars(){
+				try{
+					if(this.ifHaveGoodCar == '已经是全部数据了' && this.goodCarData.pageNum != 1){
 						this.ifHaveGoodCar = '已经是全部数据了';
 					}else{
-						if(resData.data.code == 0){
-							this.oldGoodCarData = this.goodCarData;
-							this.goodCarTotal = resData.data.body.total;
-							if(this.goodCarData.page == 1){
-								this.goodCarList = resData.data.body.rows;
+						this.ifHaveGoodCar = '正在加载...';
+						let resData = await getGoodCar(this.goodCarData);
+						if(resData.code === 200){
+							this.goodCarTotal = resData.total;
+							this.ifHaveGoodCar = '上拉加载';
+							if(this.goodCarData.pageNum == 1){
+								this.goodCarList = resData.result.list;
 							}else{
-								this.goodCarList = this.goodCarList.concat(resData.data.body.rows);
+								this.goodCarList = this.goodCarList.concat(resData.result.list);
 							}
-							if(this.goodCarList.length == resData.data.body.total){
+							if(resData.result.hasNextPage == false){
 								this.ifHaveGoodCar = '已经是全部数据了';
-							}else{
-								this.ifHaveGoodCar = '上拉加载';
 							}
+							this.oldGoodCarData = this.goodCarData;
+							uni.hideLoading();
 						}else{
-							uni.showToast({
-								title: resData.data.msg,
-								mask: false,
-								icon: 'none',
-								duration: 1500
-							});
+							this.$toast(resData.message,false)
 						}
 					}
-				})
-			},
-			getCarBrand(){
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
+				}catch(e){
+					this.$toast('请求失败')
 				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {};
-				uni.showLoading({
-					title: '加载中请稍后',
-					mask: false
-				});
-				this.$postRequest('/carBrand/SELECT_BRAND_ALL',params,(resData)=>{
-					uni.hideLoading();
-					// 获取品牌数据成功
-					if(resData.data.code == 0){
-						var carBrandData = resData.data.body;
-						var jsonOne = {letter:'',data:[]};
-						for(let i in carBrandData){
-							if(carBrandData[i].letters == this.cheXingState){
+			},
+			// 获取车辆品牌
+			async getCarBrand(){
+				this.$loading()
+				try{
+					let resData = await getBrand();
+					if(resData.code == 200){
+						let carBrandData = resData.result;
+						let jsonOne = {letter:'A',data:[]};
+						let cheXingList = new Array();
+						let i = 0;
+						let index = 0;
+						let xunHuan = () => {
+							new Promise((reslove,reject) =>{
+								if(jsonOne.letter != carBrandData[i].letters){
+									jsonOne = JSON.stringify(jsonOne)
+									cheXingList[index] = JSON.parse(jsonOne);
+									jsonOne = JSON.parse(jsonOne)
+									jsonOne.letter = carBrandData[i].letters;
+									jsonOne.data = [];
+									index++;
+								}
 								jsonOne.data.push(carBrandData[i].name);
 								if(i == carBrandData.length - 1){
-									this.cheXingList.push(jsonOne);
-									this.lists = this.cheXingList;
+									cheXingList.push(jsonOne);
+									this.lists = cheXingList;
+									uni.hideLoading();
+									return;
 								}
-							}else{
-								this.cheXingState = carBrandData[i].letters;
-								jsonOne.letter = carBrandData[i].letters;
-								jsonOne.data.push(carBrandData[i].name);
-								this.cheXingList.push(jsonOne);
-								jsonOne = {letter:'',data:[]};
-							}
-						}	
+								i++;
+								reslove()
+							}).then( () => {
+								xunHuan();
+							})
+						}
+						xunHuan();
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message);
 					}
-				})
+				}catch(e){
+					this.$toast('请求失败')
+				}
 			},
 			// 上划无效果
 			moveHandle(){}
 		},
 		// 上滑加载特价好车列表
 		onReachBottom(){
-			this.goodCarData.page++;
-			this.getGoodCar();
+			this.goodCarData.pageNum++;
+			this.getGoodCars();
 		}
 	}
 </script>

@@ -29,7 +29,7 @@
 			已上架
 		</view>
 		<view class="paiXuChild" @tap="goWindow('已售出',2)">
-			已售出
+			已出售
 		</view>
 	</view>
 </template>
@@ -47,13 +47,21 @@
 				var currPage = pages[pages.length - 1]; //当前页面
 				var prevPage = pages[pages.length - 2]; //上一个页面
 				//h5的写法
-				prevPage.carStateChoose = state
-				prevPage.state = index
+				prevPage.carStateChoose = state;
+				prevPage.state = index;
+				if(prevPage.goodCarData){
+					prevPage.goodCarData.state = index;
+					prevPage.goodCarData.pageNum = 1;
+				}
 				//小程序的写法 具体要怎么写可以打印一下prevPage看一下
-				prevPage.$vm.carStateChoose = state
-				prevPage.$vm.state = index
+				prevPage.$vm.carStateChoose = state;
+				prevPage.$vm.state = index;
 				prevPage.ifHaveGoodCar = '上划加载';
 				prevPage.$vm.ifHaveGoodCar = '上划加载';
+				if(prevPage.$vm.goodCarData){
+					prevPage.$vm.goodCarData.state = index;
+					prevPage.$vm.goodCarData.pageNum = 1;
+				}
 				uni.navigateBack();
 			}
 		}

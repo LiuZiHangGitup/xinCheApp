@@ -109,7 +109,7 @@
 		<view class="meTop">
 			<view class="meTopLeft">
 				<image src="../../static/user_pic.png"></image>
-				<text>{{ userData.name }}</text>
+				<text>{{ userData.username }}</text>
 			</view>
 			<view class="meTopRight">
 				<text>{{ userData.score }}</text><br>
@@ -118,11 +118,14 @@
 			</view>
 		</view>
 		<view class="meTopSecond">
-			<view class="meTopSecondLeft">
+			<view 
+				class="meTopSecondLeft"
+				@tap="$goWindow('../myMsg/myMsg')"
+				v-if="$qx('userInfo')">
 				<image src="../../static/me/market.png"></image>
-				<text>所属市场</text>
+				<text>我的消息</text>
 			</view>
-			<view class="meTopSecondRight">{{ userData.marketName }}</view>
+			<view class="meTopSecondRight"></view>
 		</view>
 		<view class="meBody">
 			<view class="meBodyChild">
@@ -150,6 +153,15 @@
 				</view>
 				<view class="meBodyChildRight">
 					{{ userData.merchantPhone }}
+				</view>
+			</view>
+			<view class="meBodyChild">
+				<view class="meBodyChildLeft">
+					<image src="../../static/me/market.png"></image>
+					<text>所属市场</text>
+				</view>
+				<view class="meBodyChildRight">
+					{{ userData.marketName }}
 				</view>
 			</view>
 			<view class="meBodyChild">
@@ -207,6 +219,7 @@
 </template>
 
 <script>
+	import { getMeInfo } from '@/common/api/me.js'
 	export default {
 		data() {
 			return {
@@ -218,56 +231,21 @@
 		},
 		methods: {
 			// 查询用户个人信息
-			getUserInformation(){
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'merchantId',
-					success: (res) => {
-						params.bodyData.merchantId = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'marketId',
-					success: (res) => {
-						params.bodyData.marketId = res.data;
-					}
-				})
-				this.$postRequest('/getShopInfo/USER_SHOP_INFO_GET',params, (resData) => {
-					if(resData.data.code == 0){
-						this.userData = resData.data.body
-						console.log('aaa',this.userData)
+			async getUserInformation(){
+				try{
+					let resData = await getMeInfo();
+					if(resData.code === 200){
+						this.userData = resData.result;
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							icon:'none',
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message);
 					}
-				})
+				}catch(e){
+					this.$toast('请求失败');
+				}
 			},
 			// 退出登录
 			goOutLogin(){
-				uni.removeStorageSync('token');
-				uni.removeStorageSync('uuid');
+				uni.clearStorage();
 				uni.reLaunch({
 					url:'../login/login'
 				})

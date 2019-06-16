@@ -8,10 +8,9 @@
 	background: #FFFFFF;
 }
 .wisdomChild{
-	height: 90upx;
 	width: 750upx;
-	padding: 0 25upx;
-	line-height: 90upx;
+	padding: 15upx 25upx;
+	align-items: center;
 	border-bottom: 1upx solid #E8E8E8;
 	font-size: 30upx;
 	display: flex;
@@ -20,9 +19,12 @@
 }
 .wisdomChildName{
 	width: 300upx;
-	overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
 }
 .wisdomChildPhone{
 	color: #0066FF;
@@ -52,13 +54,14 @@
 </template>
 
 <script>
+	import { getWisdom } from '@/common/api/wisdom.js'
 	export default {
 		data() {
 			return {
 				ifHaveGoodCar: '上划加载',
 				yingXiaoData:{
-					rows:20,
-					page:1
+					pageSize:20,
+					pageNum:1
 				},
 				yingXiaoList:[]
 			}
@@ -68,59 +71,33 @@
 		},
 		// 上滑加载特价好车列表
 		onReachBottom(){
-			this.yingXiaoData.page++;
+			this.yingXiaoData.pageNum++;
 			this.getYingXiao();
 		},
 		methods: {
 			// 获取智慧营销车辆
-			// 获取特价好车
-			getYingXiao(){
+			async getYingXiao(){
 				if(this.ifHaveGoodCar == '已经是全部数据了'){
 					this.ifHaveGoodCar = '已经是全部数据了';
 				}else{
 					this.ifHaveGoodCar = '正在加载...';
-					var params = {
-						headData:{
-							token:'',
-							uuid:''
-						},
-						bodyData:{}
-					}
-					uni.getStorage({
-						key: 'token',
-						success: (res) => {
-							params.headData.token = res.data;
-						}
-					})
-					uni.getStorage({
-						key:'uuid',
-						success: (res) => {
-							params.headData.uuid = res.data;
-						}
-					})
-					params.bodyData = this.yingXiaoData;
-					this.$postRequest('/getShopClueInfo/CLUE_INFO_GET',params, (resData) => {
-						if(this.yingXiaoList == resData.data.body.total){
-							this.ifHaveGoodCar = '已经是全部数据了';
-						}else{
-							if(resData.data.code == 0){
-								this.goodCarTotal = resData.data.body.total;
-								this.yingXiaoList = this.yingXiaoList.concat(resData.data.body.rows);
-								if(this.yingXiaoList.length == resData.data.body.total){
-									this.ifHaveGoodCar = '已经是全部数据了';
-								}else{
-									this.ifHaveGoodCar = '上拉加载';
-								}
+					// this.yingXiaoData;
+					try{
+						let resData = await getWisdom(this.yingXiaoData);
+						if(resData.code === 200){
+							this.goodCarTotal = resData.result.total;
+							this.yingXiaoList = this.yingXiaoList.concat(resData.result.list);
+							if(resData.result.hasNextPage == false){
+								this.ifHaveGoodCar = '已经是全部数据了';
 							}else{
-								uni.showToast({
-									title: resData.data.msg,
-									mask: false,
-									icon: 'none',
-									duration: 1500
-								});
+								this.ifHaveGoodCar = '上拉加载';
 							}
+						}else{
+							this.$toast(resData.message);
 						}
-					})
+					}catch(e){
+						this.$toast('请求失败');
+					}
 				}
 			},
 			getPhone(phoneNumber){

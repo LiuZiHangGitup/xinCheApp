@@ -34,28 +34,25 @@
 				不限
 			</view>
 			<view class="carPriceBodyChild" @tap="goWindow(1)">
-				0-3万
+				0-5万
 			</view>
 			<view class="carPriceBodyChild" @tap="goWindow(2)">
-				3-5万
-			</view>
-			<view class="carPriceBodyChild" @tap="goWindow(3)">
 				5-10万
 			</view>
+			<view class="carPriceBodyChild" @tap="goWindow(3)">
+				10-20万
+			</view>
 			<view class="carPriceBodyChild" @tap="goWindow(4)">
-				10-15万
-			</view>
-			<view class="carPriceBodyChild" @tap="goWindow(5)">
-				15-20万
-			</view>
-			<view class="carPriceBodyChild" @tap="goWindow(6)">
 				20-30万
 			</view>
-			<view class="carPriceBodyChild" @tap="goWindow(7)">
+			<view class="carPriceBodyChild" @tap="goWindow(5)">
 				30-50万
 			</view>
-			<view class="carPriceBodyChild" @tap="goWindow(8)">
-				50万以上
+			<view class="carPriceBodyChild" @tap="goWindow(6)">
+				50-100万
+			</view>
+			<view class="carPriceBodyChild" @tap="goWindow(7)">
+				100万以上
 			</view>
 		</view>
 	</view>
@@ -74,15 +71,24 @@
 				var currPage = pages[pages.length - 1]; //当前页面
 				var prevPage = pages[pages.length - 2]; //上一个页面
 				//h5的写法
-				prevPage.carPrice = state
+				prevPage.carPrice = state;
 				prevPage.retailPrice = state;
+				if(prevPage.goodCarData){
+					prevPage.goodCarData.retailPrice = state;
+					prevPage.goodCarData.pageNum = 1;
+				}
 				prevPage.page = 1;
-				//小程序的写法 具体要怎么写可以打印一下prevPage看一下
-				prevPage.$vm.carPrice = state
-				prevPage.$vm.retailPrice = state;
 				prevPage.$vm.page = 1;
+				//小程序的写法 具体要怎么写可以打印一下prevPage看一下
+				prevPage.$vm.carPrice = state;
+				prevPage.$vm.retailPrice = state;
 				prevPage.ifHaveGoodCar = '上划加载';
 				prevPage.$vm.ifHaveGoodCar = '上划加载';
+				if(prevPage.$vm.goodCarData){
+					prevPage.$vm.goodCarData.retailPrice = state;
+					prevPage.$vm.goodCarData.pageNum = 1;
+				}
+				prevPage.$vm.page = 1;
 				uni.navigateBack();
 			}
 		}

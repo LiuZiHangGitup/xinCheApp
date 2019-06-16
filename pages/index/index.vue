@@ -5,8 +5,10 @@
 	}
 	.head{
 		width: 750upx;
-		height: 150upx;
+		/* padding: 20upx; */
+		flex-wrap: wrap;
 		display: flex;
+		align-items: center;
 		justify-content: flex-start; 
 	}
 	.head:first-child{
@@ -14,13 +16,13 @@
 	}
 	.head:nth-child(2){
 		background-color: #ffffff;
-		margin-top: 20upx;
+		margin-top: 10upx;
 	}
 	.headChild {
 		width: 175upx;
-		height: 175upx;
+		height: 125upx;
 		margin-left: 10upx;
-		margin-top: 20upx;
+		margin-top: 10upx;
 		text-align: center;
 		font-size: 26upx;
 	}
@@ -37,7 +39,7 @@
 	}
 	/* 轮播部分样式--start */
 	.banner{
-		margin: 20upx 0upx;
+		margin: 10upx 0upx 0upx 0upx;
 		height: 220upx;
 	}
 	.banner swiper{
@@ -51,46 +53,51 @@
 	.notice{
 		width: 750upx;
 		background: #FFFFFF;
-		padding: 20upx;
+		padding: 15upx 35upx;
 		box-sizing: border-box;
-		position: relative;
-		float: left;
+		display: flex;
 		font-size: 26upx;
+		align-items: center;
+		justify-content: space-between;
 	}
-	.notice image{
-		width: 80upx;
-		height: 80upx;
-		float: left;
-		margin-right: 20upx;
+	.notice-title-item{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 550upx;
+		height: 150upx;
 	}
-	.notice .noticeText{
-		font-size: 26upx;
-		display: block;
-		margin: 10upx 0;
-		width: 300upx;
+
+    .Recommend-right{
+        display:flex;
+        align-items:center;
+        padding-top:10upx;
+        padding-bottom:10upx;
+		color: #333;
+    }
+	.Recommend-right>view:first-child{
+		max-width: 160upx;
+		text-overflow: ellipsis;
 		overflow: hidden;
-		text-overflow:ellipsis;
 		white-space: nowrap;
-		float: left;
 	}
-	.notice .noticeTime{
-		float: right;
-		font-size: 26upx;
-		color: #909399;
-		margin: 10upx 0;
-		margin-right: 10%;
+	.Recommend-right>view:last-child{
+		width: 350upx;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 	}
-	.notice .goNotice{
+	.swiper-content {
 		position: absolute;
-		top: 55upx;
-		right: 2%;
-		font-size: 50upx;
-		color: #606266;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 280upx;
 	}
-	.notice .goNotice image{
-		width: 15upx;
-		height: 20upx;
+	.swiper-content swiper {
+		height: 280upx;
 	}
+
 	/* 好车列表 */
 	.carList{
 		width: 750upx;
@@ -111,14 +118,14 @@
 	.carLists{
 		float: left;
 		width: 100%;
-		height: 200upx;
-		padding: 20upx 0;
+		padding: 10upx 0;
 		border-bottom: 10upx solid #f3f3f3;
-		
+		margin: 10upx;
 	}
 	.carListsLeft{
 		width: 45%;
 		float: left;
+		height: 200upx;
 	}
 	.carListsLeft image{
 		width: 100%;
@@ -128,6 +135,9 @@
 		float: right;
 		width: 50%;
 		margin-right: 2%;
+		display: flex;
+		flex-direction:column;
+		
 	}
 	.carListsRight text{
 	    font-size: 30upx;
@@ -142,7 +152,7 @@
 	.carListsRight text:nth-child(2){
 		display: block;
 		color: #909399;
-		margin: 7.5% 0;
+		margin: 10upx 0;
 	}
 	.carListsRight text:nth-child(3){
 		overflow: hidden;
@@ -151,6 +161,7 @@
 		color: #21bfff;
 		display: inline-block;
 		width: 80%;
+		padding: 20upx 0 0 0;
 	}
 	.goodCarNum{
 		width: 750upx;
@@ -167,37 +178,69 @@
 	<view id="app">
 		<!-- 蓝色头部背景 -->
 		<view class="head">
-			<view class="headChild headChildTop" @click="goNavWindow('../addCar/addCar?carName=必填')">
+			<view 
+				v-if="$qx('addCar')"
+				class="headChild headChildTop" 
+				@click="$goNavWindow('../addCar/addCar?carName=必填')">
 				<image src="../../static/index/sys.png" mode=""></image><br>
 				<text>新建车辆</text>
 			</view>
-			<view class="headChild headChildTop" @click="goWindow('../wisdom/wisdom')">
+			<view 
+				class="headChild headChildTop" 
+				@tap="$goWindow('../wisdom/wisdom')"
+				v-if="$qx('wisdom')">
 				<image src="../../static/index/IntelligentMarketing.png" mode=""></image><br>
 				<text>智慧营销</text>
 			</view>
-			<view class="headChild headChildTop" @click="goNavWindow('../goodCars/goodCars')">
+			<view 
+				class="headChild headChildTop" 
+				@tap="$goNavWindow('../goodCars/goodCars')" 
+				v-if="$qx('goodCar')">
 				<image src="../../static/index/specialCar.png" mode=""></image><br>
 				<text>特价好车</text>
+			</view>
+			<view 
+				class="headChild headChildTop" 
+				@tap="$goWindow('../weiDian/weiDian')"
+				v-if="$qx('microShop')">
+				<image src="../../static/index/weiDian.png" mode=""></image><br>
+				<text>微店</text>
 			</view>
 		</view>
 		<!-- 白色头部背景 -->
 		<view class="head">
-			<view class="headChild" @click="goWindow('../vehicleSource/vehicleSource?paiXu=最近入库')">
+			<view 
+				class="headChild" 
+				@click="$goWindow('../vehicleSource/vehicleSource?paiXu=最近入库')"
+				v-if="$qx('carAdmin')">
 				<image src="../../static/index/goOut.png" mode=""></image><br>
 				<text>车辆管理</text>
 			</view>
-			<view class="headChild" @tap="goWindow('../vehicleSource/vehicleSource?paiXu=最近入库&shangjia=1')">
+			<view 
+				class="headChild" 
+				@tap="$goWindow('../vehicleSource/vehicleSource?paiXu=最近入库&shangjia=1')">
 				<image src="../../static/index/nowCarNum.png" mode=""></image><br>
 				<text>上架车辆</text>
 			</view>
-			<view class="headChild" @tap="goNavWindow('../statistics/statistics')">
+			<view 
+				class="headChild" 
+				@tap="$goNavWindow('../statistics/statistics')"
+				v-if="$qx('dataStatistic')">
 				<image src="../../static/index/nowMonthCarNum.png" mode=""></image><br>
 				<text>数据统计</text>
 			</view>
-			<view class="headChild" @tap="zwkf()">
+			<!-- @tap="$goNavWindow('../statistics/statistics')" -->
+			<view 
+				class="headChild" 
+				v-if="$qx('allCars')"
+				@tap="$goWindow('../quanWangCheYuan/quanWangCheYuan')">
+				<image src="../../static/index/cheYuan.png" mode=""></image><br>
+				<text>全网车源</text>
+			</view>
+			<!-- <view class="headChild" @tap="zwkf()">
 				<image src="../../static/index/shuJuFenXi.png" mode=""></image><br>
 				<text>数据分析</text>
-			</view>
+			</view> -->
 		</view>
 		<!-- 轮播图 -->
 		<view class="banner">
@@ -220,22 +263,62 @@
 			</swiper>
 		</view>
 		<!-- 公告 -->
-		<view class="notice">
-			<image src="../../static/index/notice.png" mode=""></image>
-			<text class="noticeText">热烈庆祝信车智联项目火爆上线</text>
-			<text class="noticeTime">30分钟之前</text>
-			<text class="noticeText">2019年4月25日消防检测隆重登场</text>
-			<text class="noticeTime">30分钟之前</text>
-			<view class="goNotice"><image src="../../static/index/jianTou.png" mode=""></image></view>
+		<view class="notice" v-if="qx != 'admine'">
+			<view class="notice-img">
+				<view><image src="../../static/index/notice.png" style="width: 70upx;height: 70upx;"></image></view>
+			</view>
+			<view class="notice-title">
+				<view class="notice-title-item">
+					<view 
+						style="width: 300upx;"
+						v-if="notice_list.length == 0">暂无公告</view>
+					<view 
+						style="width: 550upx;"
+						v-if="notice_list.length == 1"
+						@tap="$goWindow('../noticeList/noticeList')"
+						>{{ notice_list[0].title }}:{{ notice_list[0].noticeContent}}</view>
+					<swiper 
+						:circular="true" 
+						vertical="true"  
+						autoplay='true'   
+						interval='5000' 
+						indicator-color='white' 
+						indicator-active-color='white'
+						v-if="notice_list.length > 1"
+						 @tap="$goWindow('../noticeList/noticeList')"
+						style='height:120upx;width: 550upx;'>
+						<swiper-item 
+							v-for="(item,index) in notice_list" 
+							:key="index" 
+							style="width: 400upx; height: 150upx;">
+							<view 
+								class="Recommend-right" 
+								v-for="(items,index2) in item" 
+								:key="index2">
+								<view>{{items.title}}：</view>
+								<view>{{items.noticeContent}}</view>
+							</view>
+						</swiper-item>
+					</swiper>
+				</view>
+			</view>
+			<view class="notice-more">
+				<view>
+					<image 
+						src="../../static/index/jianTou.png" 
+						style="width:25upx;height: 25upx;">
+					</image>
+				</view>
+			</view>
 		</view>
 		<view class="carList">
 			<view class="carListTop">
 				特价好车
 			</view>
-			 <!-- @tap="goWindow('../carInformation/carInformation')" -->
+			 <!-- @tap="$goWindow('../carInformation/carInformation')" -->
 			<view class="carLists" v-for="(item,index) in goodCarList" :key="index">
 				<view class="carListsLeft">
-					<image @tap="goCarInformation()" :src="item.carImg"></image>
+					<image @tap="goCarInformation(item.id)" :src="item.carImg" style="width: 100%;height: 100%;"></image>
 				</view>
 				<view class="carListsRight">
 					<text>{{item.carTitle}}</text>
@@ -251,9 +334,17 @@
 </template>
 
 <script>
+	import { getGoodCar } from '@/common/api/goodCar.js'
+	import { getNoticeList } from '@/common/api/noticeList.js'
+	
 	export default {
 		data() {
 			return {
+				noticeList:[],
+				notice_list:[],
+				noticePage:1,
+				noticePageSize:10,
+				qx:'',
 				title: '信车',
 				// 查询特价好车所需条件
 				goodCarData:{
@@ -262,123 +353,10 @@
 					"carPrice":null,
 					"carYear":null,
 					"dataSources": "",	
-					"page": 1,
+					"pageNum": 1,
 					"paixu": "",
-					"rows": 10,
+					"pageSize": 10,
 					"state": "1"
-				},
-				jiaJson:{
-					acquiredAt: null,
-					acquirerId: null,
-					acquisitionPriceCents: null,
-					acquisitionType: null,
-					age: null,
-					allianceCoverUrl: null,
-					allianceMinimunPriceCents: null,
-					allowedMortgage: false,
-					areaId: 413,
-					areaName: "f-6",
-					attachments: "{}",
-					brandName: "阿尔法·罗密欧",
-					businessInsuranceDate: null,
-					carType: null,
-					channelId: null,
-					closingCostCents: null,
-					companyId: null,
-					configurationNote: null,
-					consignorName: null,
-					consignorPhone: null,
-					consignorPriceCents: null,
-					coverUrl: ["http://47.105.165.101:8080/img/2019051321230272790717.png","http://47.105.165.101:8080/img/2019051321230554480041.png","http://47.105.165.101:8080/img/2019051321230739269263.png"],
-					createdAt: "2019-05-13 21:24:35",
-					currentPlateNumber: null,
-					currentPublishRecordsCount: 0,
-					deletedAt: null,
-					displacement: null,
-					doorCount: null,
-					emissionStandard: null,
-					estimatePriceCents: null,
-					estimatedGrossProfitCents: null,
-					estimatedGrossProfitRate: 0,
-					exteriorColor: "black",
-					feeDetail: null,
-					forceInsuranceDate: "1990-01",
-					fuelType: null,
-					hasMaintainHistory: false,
-					id: 124,
-					imagesCount: 0,
-					imported: null,
-					interiorColor: "double",
-					interiorNote: null,
-					isBitePrice: null,
-					isFaceToFace: "1",
-					isRegularMaintenance: "1",
-					isSpecialOffer: null,
-					isTransfer: null,
-					isTurboCharger: "0",
-					isWholesale: null,
-					keyNum: null,
-					level: null,
-					licenseInfo: "unlicensed",
-					licensedAt: null,
-					loanBillId: null,
-					loanStatus: null,
-					maintainMileage: 0,
-					managerPriceCents: null,
-					manufacturedAt: null,
-					manufacturerConfiguration: null,
-					manufacturerName: null,
-					marketId: 12,
-					mileage: 15,
-					mileageInFact: 0,
-					mortgageNote: null,
-					name: null,
-					namePinyin: null,
-					nature: "1",
-					newCarAdditionalPriceCents: null,
-					newCarDiscount: 0,
-					newCarFinalPriceCents: null,
-					newCarGuidePriceCents: null,
-					newCarWarranty: null,
-					onlinePriceCents: null,
-					onsale: false,
-					onsaleDescription: null,
-					onsalePriceCents: null,
-					personalEquipment: "{}",
-					predictedRestockedAt: null,
-					redStockWarningDays: 45,
-					relationId: null,
-					reserved: false,
-					reservedAt: null,
-					sellable: false,
-					sellerId: null,
-					sellingPoint: null,
-					seriesName: "ALFA 156",
-					shopId: 47,
-					showPriceCents: null,
-					standardEquipment: "{}",
-					starRating: 0,
-					state: "0",
-					stateChangedAt: null,
-					stateNote: null,
-					statesStatistic: "{}",
-					stockAgeDays: 0,
-					stockNumber: null,
-					stockOutAt: null,
-					styleId: 165,
-					styleName: "2004款 2.0 AT",
-					systemName: null,
-					t: 0,
-					tradeNum: null,
-					tradePrice: null,
-					transferNum: null,
-					transmission: "manual",
-					updatedAt: "2019-05-13 21:24:35",
-					validateDate: "1990-01",
-					vin: "15242515425124512",
-					warrantyFeeCents: null,
-					warrantyId: null,
-					yellowStockWarningDays: 30,
 				},
 				// 特价好车参数
 				goodCarList:[],
@@ -388,102 +366,85 @@
 				goodCarTotal:0
 			}
 		},
-		onNavigationBarButtonTap(){
-			this.goNavWindow('../me/me')
+		onNavigationBarButtonTap(e){
+			if(e.index == 0){
+				this.$goNavWindow('../me/me')
+			}
 		},
 		onShow(){
-			// 查询用户是否已登录未登录调回登录页
-			uni.getStorage({
-				key: 'token',
-				success: (res) => {
-					return;
-				},
-				fail: (errRes) => {
-					uni.reLaunch({
-						url:'../login/login'
-					})
-				}
-			});
+			//获取消息通知列表
+			this.getNoticeLists()
 		},
 		onLoad() {
 			// 获取特价好车列表
 			this.getGoodCar();
-			console.log(this.$router);
 		},
 		methods: {
-			goCarInformation(){
+			async getNoticeLists(){
+				let params = {"pageNum":this.noticePage,"pageSize":this.noticePageSize};
+				this.notice_list = [];
+				try{
+					let resData = await getNoticeList(params);
+					if(resData.code === 200){
+						if(resData.result.list.length == 1){
+							this.notice_list = resData.result.list;
+						}else{
+							//两条通知一组轮播
+							let jsonOne = {}
+							var data = resData.result.list;
+							var num = 2;
+							// var notice_list = this.notice_list;
+							for (var i = 0; i < resData.result.list.length; i += num){
+								this.notice_list.push(data.slice(i,i+num));
+							}
+						}
+					}else{
+						this.$toast(resData.message);
+					}
+					uni.hideLoading();
+				}catch(e){
+					this.$toast('请求失败')
+				}
+			},
+			//特价好车详情
+			goCarInformation(id){
 				uni.navigateTo({
-					url: '../carInformation/carInformation?carInfo='+JSON.stringify(this.jiaJson)
-				});
+					url:'/pages/goodCarDetail/goodCarDetail?id=' + id
+				})
+				//this.$goWindow('../carInformation/carInformation?carInfo='+JSON.stringify(this.jiaJson));
 			},
 			// 获取特价好车
-			getGoodCar(){
+			async getGoodCar(){
 				if(this.ifHaveGoodCar == '已经是全部数据了'){
 					this.ifHaveGoodCar = '已经是全部数据了';
 				}else{
 					this.ifHaveGoodCar = '正在加载...';
-					var params = {
-						headData:{
-							token:'',
-							uuid:''
-						},
-						bodyData:{}
-					}
-					uni.getStorage({
-						key: 'token',
-						success: (res) => {
-							params.headData.token = res.data;
-						}
-					})
-					uni.getStorage({
-						key:'uuid',
-						success: (res) => {
-							params.headData.uuid = res.data;
-						}
-					})
-					params.bodyData = this.goodCarData;
-					this.$postRequest('/specialCar/SELECT_BY_MANY',params, (resData) => {
-						if(this.goodCarList == resData.data.body.total){
-							this.ifHaveGoodCar = '已经是全部数据了';
+					this.$loading();
+					try{
+						let resData = await getGoodCar(this.goodCarData);
+						if(this.goodCarList == resData.result.total){
+							this.ifHaveGoodCar = '已经是全部数据了';	
 						}else{
-							if(resData.data.code == 0){
-								this.goodCarTotal = resData.data.body.total;
-								this.goodCarList = this.goodCarList.concat(resData.data.body.rows);
-								if(this.goodCarList.length == resData.data.body.total){
+							if(resData.code === 200){
+								this.goodCarTotal = resData.result.total;
+								this.goodCarList = this.goodCarList.concat(resData.result.list);
+								if(resData.result.hasNextPage == false){
 									this.ifHaveGoodCar = '已经是全部数据了';
 								}else{
-									this.ifHaveGoodCar = '上拉加载';
+								    this.ifHaveGoodCar = '上拉加载';
 								}
 							}else{
-								uni.showToast({
-									title: resData.data.msg,
-									mask: false,
-									icon: 'none',
-									duration: 1500
-								});
+								this.$toast(resData.message,false)
 							}
 						}
-					})
+						uni.hideLoading();
+					}catch(e){
+						this.$toast('请求失败')
+					}
 				}
 			},
-			// 进入新建车辆页面
-			goWindow(url){
-				uni.navigateTo({
-					url:url
-				})
-			},
-			goNavWindow(url){
-				uni.switchTab({
-					url: url
-				})
-			},
 			zwkf(){
-				uni.showToast({
-					title: '暂未开放',
-					icon: 'none',
-					mask: false,
-					duration: 1500
-				});
+				this.$toast('暂未开放',false)
 			}
 		},
 		// 下拉刷新功能
@@ -494,7 +455,7 @@
 		},
 		// 上滑加载特价好车列表
 		onReachBottom(){
-			this.goodCarData.page++;
+			this.goodCarData.pageNum++;
 			this.getGoodCar();
 		}
 	}

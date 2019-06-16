@@ -1,7 +1,7 @@
 {
     "name" : "信车管家",
-    "appid" : "__UNI__E6E6860",
-    "description" : "",
+    "appid" : "__UNI__AE501CB",
+    "description" : "二手车市场",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -50,7 +50,7 @@
             "sdkConfigs" : {},
             "icons" : {
                 "ios" : {
-                    "appstore" : "C:/Users/Lenovo/Desktop/48496255d6a7d5584a96d38618763dd.png",
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
                     "ipad" : {
                         "app" : "unpackage/res/icons/76x76.png",
                         "app@2x" : "unpackage/res/icons/152x152.png",
@@ -88,8 +88,7 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        /* 小程序特有相关 */
-        "appid" : "",
+        "appid" : "wx11dcbb041d8dbb9e",
         "setting" : {
             "urlCheck" : false
         },
@@ -98,6 +97,7 @@
     "h5" : {
         "router" : {
             "mode" : "history"
-        }
+        },
+        "domain" : "192.168.0.112"
     }
 }

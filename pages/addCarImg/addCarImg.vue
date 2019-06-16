@@ -132,17 +132,9 @@
 		// 点击提交事件
 		onNavigationBarButtonTap(){
 			if(this.imgList.length<1){
-				uni.showToast({
-					title: '请最少上传一张照片',
-					icon: 'none',
-					mask: false,
-					duration: 1500
-				});
+				this.$toast('请最少上传一张照片',false)
 			}else{
-				uni.showLoading({
-					title: '请稍后...',
-					mask: false
-				});
+				this.$loading()
 				for(let i in this.imgList){
 					if(i == this.imgList.length - 1){
 						this.submitList.push(this.imgList[i].url);
@@ -220,14 +212,14 @@
 						success: (chooseImageRes) => {
 							const tempFilePaths = chooseImageRes.tempFilePaths;
 							uni.uploadFile({
-								url: 'http://47.105.165.101:8585/xccsappserver/car/multipartFile',
+								url: this.$uploadImageUrl,
 								filePath: tempFilePaths[0],
 								name: 'file',
 								formData: {},
 								async success(resData) {
-									if (resData.statusCode == 200) {
+									if (resData.data.code == 200) {
 										var imgJson = {
-											url: JSON.parse(resData.data).msg,
+											url: JSON.parse(resData.data).message,
 											testState: false,
 											closeState: false,
 											text: ''
@@ -235,12 +227,12 @@
 										_this.imgList.push(imgJson);
 										_this.verificationImg();
 										uni.hideLoading();
+									}else{
+										_this.$toast(JSON.parse(resData.data).message)
 									}
 								},
 								async fail(err) {
-									uni.showLoading({
-										title: `上传失败!`
-									});
+									this.$toast('上传失败',false);
 								}
 							});
 						}

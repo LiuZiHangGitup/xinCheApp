@@ -10,19 +10,18 @@
 .topFixed{
 	position: fixed;
 	z-index: 2;
-	top: 90upx;
+	top: 150upx;
 	left: 0upx;
 	right: 0upx;
-	height: 70upx;
 	display: flex;
 	justify-content: space-between;
-	padding: 0upx 100upx;
+	padding: 0upx 20upx;
 	box-sizing: border-box;
 }
 .topFixedLeft{
 	display: flex;
-	justify-content: space-between;
-	width: 350upx;
+	justify-content:center;
+	align-items:center;
 }
 .goBack image{
 	width: 40upx;
@@ -34,9 +33,22 @@
 	background-color: rgba(0,0,0,0.3);
 	font-size: 24upx;
 	border-radius: 25upx;
-	padding: 10upx 15upx;
-	text-align: center;
-	box-sizing: border-box;
+	padding: 5upx 15upx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #FFFFFF;
+}
+.fenxiang{
+	height: 40upx;
+	line-height: 40upx;
+	background-color: rgba(0,0,0,0.3);
+	font-size: 24upx;
+	border-radius: 25upx;
+	padding: 5upx 15upx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	color: #FFFFFF;
 }
 .carInfoTop,swiper,swiper-item,.swiper-item,.swiperImg{
@@ -52,6 +64,8 @@
 }
 .carInfoBodyTop{
 	line-height: 50upx;
+	display: flex;
+	align-items: center;
 }
 .carInfoBodyTopLeft{
 	display: inline-block;
@@ -159,29 +173,34 @@
 			</view> -->
 		</view>
 		<view class="carInfoTop">
-			<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+			<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
 				<swiper-item v-for="(item,index) in carData.coverUrl" :key="index">
-					<view class="swiper-item"><image class="swiperImg" :src="item" mode=""></image></view>
+					<view class="swiper-item">
+						<image class="swiperImg" :src="item" mode=""></image>
+					</view>
 				</swiper-item>
 			</swiper>
 		</view>
 		<view class="carInfoBody">
 			<view class="carInfoBodyTop">
 				<text class="carInfoBodyTopLeft">信车认证</text>
-				<text class="carInfoBodyTopRight">{{ carData.styleName }}</text>
+				<text class="carInfoBodyTopRight">{{ carData.typeId }}</text>
 			</view>
 			<view class="carInfoBodyBody">
-				<text class="carInfoBodyBodyLeft">2018 | 8.3万公里</text>
-				<text class="carInfoBodyBodyRight">零售价：{{ carData.onlinePriceCents }}万</text>
+				<text class="carInfoBodyBodyLeft">{{carData.licensedAt}} | {{carData.mileage}}万公里</text>
+				<text class="carInfoBodyBodyRight">
+					<block v-if="carData.onlinePriceCents == null">零售价：暂无</block>
+					<block v-else>零售价：{{ carData.onlinePriceCents }}万</block>
+				</text>
 			</view>
 			<view class="carInfoBodyFoot">
-				不包含过户费，不是一口价
+				{{ carData.remark }}
 			</view>
 		</view>
 		<view class="info">
 			<view class="infoChild">
 				<view class="infoChild-item">
-					<text>{{ carData.exteriorColor }}</text>
+					<text>{{ carData.exteriorColorName }}</text>
 					<text>外观颜色</text>
 				</view>
 			</view>
@@ -199,14 +218,15 @@
 			</view>
 			<view class="infoChild">
 				<view class="infoChild-item">
-					<text>{{ carData.carType }}</text>
+					<text>{{ carData.merchantName }}</text>
 					<text>车身类型</text>
 				</view>
 			</view>
 			<!-- isTurboCharger -->
 			<view class="infoChild">
 				<view class="infoChild-item">
-					<text>{{ carData.displacement }} {{ carData.isTurboCharger }}</text>
+					 <!-- {{ carData.isTurboCharger }} -->
+					<text>{{ carData.displacement }}{{ carData.isTurboCharger }}</text>
 					<text>排量</text>
 				</view>
 			</view>
@@ -258,174 +278,103 @@
 		</view>
 		<view class="foot">
 			<view class="footChild">卖点描述</view>
-			<view class="footChild">{{ carData.onsaleDescription }}</view>
+			<view class="footChild" v-text="carData.sellingPoint == ''? '暂无描述':carData.sellingPoint"></view>
 			<view class="footChild">卖家信息</view>
-			<view class="footChild">{{ carData.areaName }}</view>
-			<view class="footChild">--</view>
-			<view class="footChild" @tap="goPhone()">400-14588-14588</view>
+			<view class="footChild">所在车市区域：{{ carData.areaName }}</view>
+			<view class="footChild" @tap="$goPhone(carData.respoPhone)">卖家电话：{{ carData.respoPhone }}</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { get_cars_detail_info } from '@/common/api/carInfomationdetail.js'
 	export default {
 		data() {
 			return {
-				carData: {}
+				carData: {},
 			}
 		},
 		onNavigationBarButtonTap:function(e){
-            uni.makePhoneCall({
-            	phoneNumber: '400-14588-14588'
-            });
+			this.$goPhone(this.carData.respoPhone);
         },
-		onLoad(params){
-			this.carData = JSON.parse(params.carInfo);
-			if(this.carData.emissionStandard = 'guo_1'){
-				this.carData.emissionStandard = '国Ⅰ';
-			}else if(this.carData.emissionStandard = 'guo_2'){
-				this.carData.emissionStandard = '国Ⅱ';
-			}else if(this.carData.emissionStandard = 'guo_3'){
-				this.carData.emissionStandard = '国Ⅲ';
-			}else if(this.carData.emissionStandard = 'guo_4'){
-				this.carData.emissionStandard = '国Ⅳ';
-			}else if(this.carData.emissionStandard = 'guo_5'){
-				this.carData.emissionStandard = '国Ⅴ';
-			}else if(this.carData.emissionStandard = 'eu_1'){
-				this.carData.emissionStandard = '欧Ⅰ';
-			}else if(this.carData.emissionStandard = 'eu_2'){
-				this.carData.emissionStandard = '欧Ⅱ';
-			}else if(this.carData.emissionStandard = 'eu_3'){
-				this.carData.emissionStandard = '欧Ⅲ';
-			}else if(this.carData.emissionStandard = 'eu_4'){
-				this.carData.emissionStandard = '欧Ⅳ';
-			}else if(this.carData.emissionStandard = 'eu_5'){
-				this.carData.emissionStandard = '欧Ⅴ';
-			}
-			if(this.carData.exteriorColor == 'black'){
-				this.carData.exteriorColor = '黑色';
-			}else if(this.carData.exteriorColor == 'white'){
-				this.carData.exteriorColor = '白色';
-			}else if(this.carData.exteriorColor == 'red'){
-				this.carData.exteriorColor = '红色';
-			}else if(this.carData.exteriorColor == 'purple'){
-				this.carData.exteriorColor = '紫色';
-			}else if(this.carData.exteriorColor == 'silver_grey'){
-				this.carData.exteriorColor = '银灰色';
-			}else if(this.carData.exteriorColor == 'green'){
-				this.carData.exteriorColor = '绿色';
-			}else if(this.carData.exteriorColor == 'yellow'){
-				this.carData.exteriorColor = '黄色';
-			}else if(this.carData.exteriorColor == 'dark_grey'){
-				this.carData.exteriorColor = '深灰色';
-			}else if(this.carData.exteriorColor == 'brown'){
-				this.carData.exteriorColor = '棕色';
-			}else if(this.carData.exteriorColor == 'champagne'){
-				this.carData.exteriorColor = '香槟色';
-			}else if(this.carData.exteriorColor == 'orange'){
-				this.carData.exteriorColor = '橙色';
-			}else if(this.carData.exteriorColor == 'blue'){
-				this.carData.exteriorColor = '蓝色';
-			}else if(this.carData.exteriorColor == 'other'){
-				this.carData.exteriorColor = '其他';
-			}
-			
-			if(this.carData.interiorColor == 'double'){
-				this.carData.interiorColor = '双色';
-			}else if(this.carData.interiorColor == 'cream'){
-				this.carData.interiorColor = '米黄';
-			}else if(this.carData.interiorColor == 'oyster_grey'){
-				this.carData.interiorColor = '米灰';
-			}else if(this.carData.interiorColor == 'red'){
-				this.carData.interiorColor = '红色';
-			}else if(this.carData.interiorColor == 'black'){
-				this.carData.interiorColor = '黑色';
-			}else if(this.carData.interiorColor == 'brown'){
-				this.carData.interiorColor = '棕色';
-			}else if(this.carData.interiorColor == 'other'){
-				this.carData.interiorColor = '其他';
-			}
-			
-			if(this.carData.isRegularMaintenance = 1){
-				this.carData.isRegularMaintenance = '是';
-			}else{
-				this.carData.isRegularMaintenance = '否';
-			}
-			
-			if(this.carData.carType == 'mid_full_size_car'){
-				this.carData.carType = '中型车';
-			}else if(this.carData.carType == 'micro_car'){
-				this.carData.carType = '微型车';
-			}else if(this.carData.carType == 'small_car'){
-				this.carData.carType = '小型车';
-			}else if(this.carData.carType == 'compact_car'){
-				this.carData.carType = '紧凑型';
-			}else if(this.carData.carType == 'mid_full_size_car'){
-				this.carData.carType = '中大型';
-			}else if(this.carData.carType == 'full_size_car'){
-				this.carData.carType = '大型车';
-			}else if(this.carData.carType == 'mpv'){
-				this.carData.carType = 'MPV';
-			}else if(this.carData.carType == 'suv'){
-				this.carData.carType = 'SUV';
-			}else if(this.carData.carType == 'sports_car'){
-				this.carData.carType = '跑车';
-			}else if(this.carData.carType == 'pickup_trucks'){
-				this.carData.carType = '皮卡';
-			}else if(this.carData.carType == 'small_van'){
-				this.carData.carType = '微面';
-			}else if(this.carData.carType == 'electrocar'){
-				this.carData.carType = '电动车';
-			}else if(this.carData.carType == 'ohter'){
-				this.carData.carType = '其他';
-			}
-			
-			if(this.carData.isTurboCharger == '0'){
-				this.carData.isTurboCharger = 'T';
-			}else{
-				this.carData.isTurboCharger = 'L';
-			}
-			
-			if(this.carData.transmission == 'auto'){
-				this.carData.transmission = '自动';
-			}else{
-				this.carData.transmission = '手动';
-			}
-			
-			if(this.carData.fuelType == 'gasoline'){
-				this.carData.fuelType = '汽油';
-			}else if(this.carData.fuelType == 'diesel'){
-				this.carData.fuelType = '柴油';
-			}else if(this.carData.fuelType == 'electric'){
-				this.carData.fuelType = '电动';
-			}else if(this.carData.fuelType == 'hybrid'){
-				this.carData.fuelType = '混合';
-			}else if(this.carData.fuelType == 'other'){
-				this.carData.fuelType = '其他';
-			}
-			
-			if(this.carData.nature == 1){
-				this.carData.nature = '非营运';
-			}else{
-				this.carData.nature = '营运';
-			}
-			
-			if(this.carData.onsaleDescription == null){
-				this.carData.onsaleDescription = '暂无描述'
-			}
-			
-			console.log(this.carData)
+		onLoad(options){
+			this.get_cars_detail_info(options.id);
 		},
 		methods: {
-			goEndInfo(){
-				uni.navigateTo({
-					url: '../carEndInfo/carEndInfo?styleId='+this.carData.styleId
-				});
+			//加载好车详情
+			async get_cars_detail_info(t){
+				console.log(t)
+				let params = {"id":t};
+				try{
+					let resData = await get_cars_detail_info(params);
+					if(resData.code === 200){
+						this.carData = resData.result;
+						this.carData.isRegularMaintenance == 0? this.carData.isRegularMaintenance = '是' : this.carData.isRegularMaintenance = '否';
+						this.carData.transmission == 'auto'? this.carData.transmission = '自动' : this.carData.transmission = '手动';
+						if(this.carData.fuelType == 'gasoline'){
+							this.carData.fuelType = '汽油'
+						}else if(this.carData.fuelType == 'diesel'){
+							this.carData.fuelType = '柴油'
+						}else if(this.carData.fuelType == 'electric'){
+							this.carData.fuelType = '电动'
+						}else if(this.carData.fuelType == 'hybrid'){
+							this.carData.fuelType = '混合'
+						}else if(this.carData.fuelType == 'other'){
+							this.carData.fuelType = '其他'
+						}
+						if(this.carData.interiorColor == 'double'){
+							this.carData.interiorColor = '双色'
+						}else if(this.carData.interiorColor == 'cream'){
+							this.carData.interiorColor = '米黄'
+						}else if(this.carData.interiorColor == 'oyster_grey'){
+							this.carData.interiorColor = '米灰'
+						}else if(this.carData.interiorColor == 'red'){
+							this.carData.interiorColor = '红色'
+						}else if(this.carData.interiorColor == 'black'){
+							this.carData.interiorColor = '黑色'
+						}else if(this.carData.interiorColor == 'brown'){
+							this.carData.interiorColor = '双色'
+						}else if(this.carData.interiorColor == 'double'){
+							this.carData.interiorColor = '棕色'
+						}else if(this.carData.interiorColor == 'rgb(59, 250, 250)'){
+							this.carData.interiorColor = '其他'
+						}
+						
+						if(this.carData.emissionStandard == 'guo_1'){
+							this.carData.emissionStandard = '国I'
+						}else if(this.carData.emissionStandard == 'guo_2'){
+							this.carData.emissionStandard = '国II'
+						}else if(this.carData.emissionStandard == 'guo_3'){
+							this.carData.emissionStandard = '国III'
+						}else if(this.carData.emissionStandard == 'guo_4'){
+							this.carData.emissionStandard = '国IV'
+						}else if(this.carData.emissionStandard == 'guo_5'){
+							this.carData.emissionStandard = '国V'
+						}else if(this.carData.emissionStandard == 'eu_1'){
+							this.carData.emissionStandard = '欧I'
+						}else if(this.carData.emissionStandard == 'eu_2'){
+							this.carData.emissionStandard = '欧II'
+						}else if(this.carData.emissionStandard == 'eu_3'){
+							this.carData.emissionStandard = '欧III'
+						}else if(this.carData.emissionStandard == 'eu_4'){
+							this.carData.emissionStandard = '欧IV'
+						}else if(this.carData.emissionStandard == 'eu_5'){
+							this.carData.emissionStandard = '欧V'
+						}
+						
+						this.carData.isTurboCharger == 0? this.carData.isTurboCharger = 'T' : this.carData.isTurboCharger = 'L'
+						
+						this.carData.nature == 0? this.carData.nature = '营运': this.carData.nature = '非营运'
+						this.carData.coverUrl = this.carData.coverUrl.split(',')
+					}else{
+						this.$toast(resData.message)
+					}
+				}catch(e){
+					this.$toast('请求失败')
+				}
 			},
-			goPhone(){
-				uni.makePhoneCall({
-					phoneNumber: '400-14588-14588'
-				});
+			goEndInfo(){
+				this.$goWindow('../carEndInfo/carEndInfo?styleId='+this.carData.styleId)
 			},
 			goBack(){
 				uni.navigateBack({});

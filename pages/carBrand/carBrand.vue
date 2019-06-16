@@ -157,33 +157,74 @@
 				</block>
 			</view>
 		</scroll-view>
-		<view class="uni-indexed-list-bar" :class="touchmove ? 'active' : ''" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" @touchcancel="touchCancel" :style="{height:winHeight + 'px'}">
-			<text v-for="(list,key) in lists" :key="key" class="uni-indexed-list-text" :class="touchmoveIndex == key ? 'active' : ''" :style="{height:itemHeight + 'px',lineHeight:itemHeight + 'px'}">{{list.letter}}</text>
+		<view 
+			class="uni-indexed-list-bar" 
+			:class="touchmove ? 'active' : ''" 
+			@touchstart="touchStart" 
+			@touchmove="touchMove" 
+			@touchend="touchEnd" 
+			@touchcancel="touchCancel" 
+			:style="{height:winHeight + 'px'}">
+			<text 
+				v-for="(list,key) in lists" 
+				:key="key" 
+				class="uni-indexed-list-text" 
+				:class="touchmoveIndex == key ? 'active' : ''" 
+				:style="{height:itemHeight + 'px',lineHeight:itemHeight + 'px'}">{{list.letter}}</text>
 		</view>
-		<view class="uni-indexed-list-alert" v-if="touchmove">
+		<view 
+			class="uni-indexed-list-alert" 
+			v-if="touchmove">
 			{{lists[touchmoveIndex].letter}}
 		</view>
 		<!-- 二级蒙层 -->
-		<view class="uni-mask" @click="closeCheXingErJi" @touchmove.stop.prevent="moveHandle" :style="erJiContentBgStyle"/>
-		<view class="erJiContent" :style="erJiContentStyle">
+		<view class="uni-mask" 
+			@click="closeCheXingErJi" 
+			@touchmove.stop.prevent="moveHandle" 
+			:style="erJiContentBgStyle"/>
+		<view 
+			class="erJiContent" 
+			:style="erJiContentStyle">
 			<view class="erJiContentTop">{{ erJiTopMsg }}</view>
-			<scroll-view :scroll-y="true" class="uni-center center-box" :style="centerBoxStyle">
-				<view v-for="(item, index) in list" :key="index" class="uni-list-item" @click="getEndCheXing({carName:item.sname,carId:item.sid})">
+			<scroll-view 
+				:scroll-y="true" 
+				class="uni-center center-box" 
+				:style="centerBoxStyle">
+				<view 
+					v-for="(item, index) in list" 
+					:key="index" 
+					class="uni-list-item" 
+					@click="getEndCheXing({carName:item.sname,carId:item.sid})">
 					{{ item.sname }}
 				</view>
 			</scroll-view>
 		</view>
 		<!-- 三级蒙层 -->
-		<view class="uni-mask2" @click="closeCheXingErJi2" @touchmove.stop.prevent="moveHandle" :style="erJiContentBgStyle2"/>
+		<view 
+			class="uni-mask2" 
+			@click="closeCheXingErJi2" 
+			@touchmove.stop.prevent="moveHandle" 
+			:style="erJiContentBgStyle2"/>
 		<!-- 三级 -->
-		<view class="erJiContent" :style="erJiContentStyle2">
+		<view 
+			class="erJiContent" 
+			:style="erJiContentStyle2">
 			<view class="erJiContentTop">{{ erJiTopMsg2 }}</view>
-			<scroll-view :scroll-y="true" class="center-box" :style="centerBoxStyle">
-				<view v-for="(item, index) in listEnd" :key="index">
-					<view class="oneChild1" v-if="item.state">
+			<scroll-view 
+				:scroll-y="true" 
+				class="center-box" 
+				:style="centerBoxStyle">
+				<view 
+					v-for="(item, index) in listEnd" 
+					:key="index">
+					<view 
+						class="oneChild1" 
+						v-if="item.state">
 						<text>{{ item.yname }}</text>
 					</view>
-					<view class="oneChild2" @click="goAddCar({carName:item.name,carId:item.id})">
+					<view 
+						class="oneChild2" 
+						@click="goAddCar({carName:item.name,carId:item.id})">
 						<text>{{ item.name }}</text>
 					</view>
 				</view>
@@ -195,6 +236,7 @@
 <script>
 	var airportDate = require("@/common/airport.js");
 	import uniPopup from '@/components/uni-popup/uni-popup.vue';
+	import { getBrand, getXinCheXings, getSelectByAudiId} from '@/common/api/goodCar.js'
 	export default {
 		components: {
 			uniPopup
@@ -242,111 +284,73 @@
 				this.carInfo.styleName = carName.carName;
 				this.carInfo.styleId = carName.carId;
 				//h5的写法
-				prevPage.pinPaiXingHao = this.carInfo;
-				prevPage.pinPaiXingHaoInfo = carName.carName;
+				prevPage.pinPaiXingHao = carName.carName;
+				prevPage.pinPaiXingHaoInfo = this.carInfo;
 				prevPage.styleName = carName.carName;
+				if(prevPage.goodCarData){
+					prevPage.goodCarData.styleName = carName.carName;
+					prevPage.goodCarData.pageNum = 1;
+				}
+				prevPage.page = 1;
+				prevPage.$vm.page = 1;
 				//小程序的写法 具体要怎么写可以打印一下prevPage看一下
 				prevPage.$vm.pinPaiXingHao = carName.carName;
 				prevPage.$vm.pinPaiXingHaoInfo = this.carInfo;
+				console.log(prevPage.$vm.pinPaiXingHaoInfo)
 				prevPage.$vm.styleName = carName.carName;
+				if(prevPage.$vm.goodCarData){
+					prevPage.$vm.goodCarData.styleName = carName.carName
+					prevPage.$vm.goodCarData.pageNum = 1;
+				}
 				prevPage.ifHaveGoodCar = '上划加载';
 				prevPage.$vm.ifHaveGoodCar = '上划加载';
 				uni.navigateBack();
 			},
 			// 获取尾级车型
-			getEndCheXing(endCarName){
+			async getEndCheXing(endCarName){
 				this.erJiTopMsg2 = endCarName.carName;
 				this.carInfo.seriesName = endCarName.carName;
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {brandName:endCarName.carId};
-				uni.showLoading({
-					title: '加载中请稍后',
-					mask: true
-				});
-				this.$postRequest('/carType/SELECT_BY_AUDI',params,(resData)=>{
-					uni.hideLoading();
+				this.$loading()
+				try{
+					let resData = await getSelectByAudiId({audiId:endCarName.carId})
 					// 获取品牌数据成功
-					if(resData.data.code == 0){
-						var carBrandData = resData.data.body;
-						console.log(carBrandData)
-						for(let i in carBrandData){
-							console.log(carBrandData[i].yname);
-							if(carBrandData[i].yname == this.cheXingEndState){
-								carBrandData[i].state = false;
-							}else{
-								carBrandData[i].state = true;
-								this.cheXingEndState = carBrandData[i].yname;
-								console.log(this.cheXingEndState)
+					if(resData.code === 200){
+						var carBrandData = resData.result;
+						if(carBrandData.length > 0){
+							for(let i in carBrandData){
+								if(carBrandData[i].yname == this.cheXingEndState){
+									carBrandData[i].state = false;
+								}else{
+									carBrandData[i].state = true;
+									this.cheXingEndState = carBrandData[i].yname;
+								}
+								if(i == carBrandData.length - 1){
+									this.listEnd = carBrandData;
+									this.openCheXingErJi2();
+								}
 							}
-							if(i == carBrandData.length - 1){
-								this.listEnd = carBrandData;
-								this.openCheXingErJi2();
-							}
-						}	
+						}else{
+							this.$toast('暂无下级车型');
+						}
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							icon: 'none',
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.data.msg,false);
 					}
-					
-				})
+					uni.hideLoading();
+				}catch(e){
+					this.$toast('请求失败');
+				}
 			},
 			// 获取车型子集车型
-			getCheXingChild(carName){
+			async getCheXingChild(carName){
 				this.erJiTopMsg = carName.carName;
 				this.carInfo.brandName = carName.carName;
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {brandName:carName.carName};
-				uni.showLoading({
-					title: '加载中请稍后',
-					mask: true
-				});
-				this.$postRequest('/carAudi/SELECT_BY_BRAND',params,(resData)=>{
-					uni.hideLoading();
-					// 获取品牌数据成功
-					if(resData.data.code == 0){
-						var carBrandData = resData.data.body;
+				this.$loading();
+				try{
+					let resData = await getXinCheXings({brandId: carName.carName})
+					if(resData.code === 200){
+						let carBrandData = resData.result;
 						for(let i in carBrandData){
-							if(carBrandData[i].name == this.cheXingChildState){
+							if(carBrandData[i].name === this.cheXingChildState){
 								carBrandData[i].state = false;
 							}else{
 								carBrandData[i].state = true;
@@ -358,15 +362,54 @@
 							}
 						}	
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							icon: 'none',
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message)
 					}
-					
-				})
+					uni.hideLoading();
+				}catch(e){
+					this.$toast('请求失败');
+				}
+			},
+			// 获取所有品牌
+			async getCarBrand(){
+				this.$loading();
+				try{
+					let resData = await getBrand({});
+					if(resData.code === 200){
+						var carBrandData = resData.result;
+						let jsonOne = {letter:'A',data:[]};
+						let cheXingList = new Array();
+						let i = 0;
+						let index = 0;
+						let xunHuan = () => {
+							new Promise((reslove,reject) =>{
+								if(jsonOne.letter != carBrandData[i].letters){
+									jsonOne = JSON.stringify(jsonOne)
+									cheXingList[index] = JSON.parse(jsonOne);
+									jsonOne = JSON.parse(jsonOne)
+									jsonOne.letter = carBrandData[i].letters;
+									jsonOne.data = [];
+									index++;
+								}
+								jsonOne.data.push(carBrandData[i].name);
+								if(i == carBrandData.length - 1){
+									cheXingList.push(jsonOne);
+									this.lists = cheXingList;
+									uni.hideLoading();
+									return;
+								}
+								i++;
+								reslove()
+							}).then( () => {
+								xunHuan();
+							})
+						}
+						xunHuan();
+					}else{
+						this.$toast(resData.message);
+					}
+				}catch(e){
+					this.$toast('请求失败');
+				}
 			},
 			// 关闭三级弹出层
 			closeCheXingErJi2(){
@@ -387,61 +430,6 @@
 			openCheXingErJi(){
 				this.erJiContentStyle = 'width: 80%;';
 				this.erJiContentBgStyle = 'width: 100%;';
-			},
-			getCarBrand(){
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {};
-				uni.showLoading({
-					title: '加载中请稍后',
-					mask: false
-				});
-				this.$postRequest('/carBrand/SELECT_BRAND_ALL',params,(resData)=>{
-					uni.hideLoading();
-					// 获取品牌数据成功
-					if(resData.data.code == 0){
-						var carBrandData = resData.data.body;
-						var jsonOne = {letter:'',data:[]};
-						for(let i in carBrandData){
-							if(carBrandData[i].letters == this.cheXingState){
-								jsonOne.data.push(carBrandData[i].name);
-								if(i == carBrandData.length - 1){
-									this.cheXingList.push(jsonOne);
-									this.lists = this.cheXingList;
-								}
-							}else{
-								this.cheXingState = carBrandData[i].letters;
-								jsonOne.letter = carBrandData[i].letters;
-								jsonOne.data.push(carBrandData[i].name);
-								this.cheXingList.push(jsonOne);
-								jsonOne = {letter:'',data:[]};
-							}
-						}	
-					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							mask: false,
-							duration: 1500
-						});
-					}
-				})
 			},
 			touchStart(e) {
 				this.touchmove = true;

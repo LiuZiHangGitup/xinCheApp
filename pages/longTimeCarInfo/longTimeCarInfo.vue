@@ -8,13 +8,15 @@
 				{{ item.typeMame }}
 			</view>
 			<view class="carEndInfoChild" v-for="(items,indexs) in item.typeValue" :key="indexs">
-				{{ items.name }}:&nbsp;&nbsp;{{ textcardetil(items.disptype, items.subvalue, items.subname, items.value) }}
+				<text>{{ items.name }}</text>
+				<text v-html="textcardetil(items.disptype, items.subvalue, items.subname, items.value)"></text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { getCarEndInfos } from '@/common/api/carEndInfo.js'
 	export default {
 		data() {
 			return {
@@ -41,44 +43,19 @@
 				}
 			},
 			// 获取长时间车辆信息接口
-			getLongTimeCarInfo(){
-				uni.showLoading({
-					title: '正在加载请稍后',
-					mask: true
-				});
-				var params = {
-					headData:{
-						token:'',
-						uuid:''
-					},
-					bodyData:{}
-				}
-				uni.getStorage({
-					key: 'token',
-					success: (res) => {
-						params.headData.token = res.data;
-					}
-				})
-				uni.getStorage({
-					key:'uuid',
-					success: (res) => {
-						params.headData.uuid = res.data;
-					}
-				})
-				params.bodyData = {styleId:this.styleId};
-				this.$postRequest('/cars/GET_CAR_DETAILED_INFO',params, (resData) => {
-					if(resData.data.code == 0){
-						this.neiBuPeiZhi = resData.data.body;
-						uni.hideLoading();
+			async getLongTimeCarInfo(){
+				let params = {id:this.styleId};
+				try{
+					let resData = await getCarEndInfos(params);
+					if(resData.code === 200){
+						this.neiBuPeiZhi = resData.result;
 					}else{
-						uni.showToast({
-							title: resData.data.msg,
-							icon: 'none',
-							mask: false,
-							duration: 1500
-						});
+						this.$toast(resData.message)
 					}
-				})
+					uni.hideLoading();
+				}catch(e){
+					this.$toast('请求失败');
+				}
 			}
 		}
 	}
@@ -102,39 +79,40 @@ padding: 0;
 	right: 0upx;
 }
 #carEndInfo{
-width: 750upx;
-padding-top: 70upx;
+	width: 750upx;
+	padding-top: 70upx;
 }
 .carEndInfoChildTop{
-width: 750upx;
-height: 60upx;
-line-height: 60upx;
-background-color: #E8E8E8;
-font-size: 26upx;
-padding-left: 30upx;
-box-sizing: border-box;
+	width: 750upx;
+	height: 60upx;
+	line-height: 60upx;
+	background-color: #E8E8E8;
+	font-size: 26upx;
+	padding-left: 30upx;
+	box-sizing: border-box;
 }
 .topMagin:nth-child(1){
 	margin-top: 70upx;
 }
 .carEndInfoChild{
-width: 750upx;
-padding-left: 30upx;
-height: 70upx;
-line-height: 70upx;
-font-size: 26upx;
-border-bottom: 1upx solid #E8E8E8;
-box-sizing: border-box;
+	width: 750upx;
+	padding: 0upx 30upx;
+	height: 70upx;
+	font-size: 26upx;
+	border-bottom: 1upx solid #E8E8E8;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 .carEndInfoChild text:first-child{
-color: #333333;
-margin-right: 15upx;
+	color: #333333;
+	margin-right: 15upx;
 }
 .carEndInfoChild text:last-child{
-width: 500upx;
-text-overflow: ellipsis;
-overflow: hidden;
-word-wrap: normal;
-color: #909399;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	word-wrap: normal;
+	color: #909399;
 }
 </style>

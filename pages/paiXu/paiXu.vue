@@ -58,12 +58,20 @@
 				//h5的写法
 				prevPage.paiXu = state;
 				prevPage.orderNum = index;
+				if(prevPage.goodCarData){
+					prevPage.goodCarData.orderNum = index
+					prevPage.goodCarData.pageNum = 1;
+				}
 				prevPage.page = 1;
-				prevPage.ifHaveGoodCar = '上划加载';
-				prevPage.$vm.ifHaveGoodCar = '上划加载';
 				//小程序的写法 具体要怎么写可以打印一下prevPage看一下
 				prevPage.$vm.paiXu = state;
 				prevPage.$vm.orderNum = index;
+				prevPage.ifHaveGoodCar = '上划加载';
+				prevPage.$vm.ifHaveGoodCar = '上划加载';
+				if(prevPage.$vm.goodCarData){
+					prevPage.$vm.goodCarData.orderNum = index
+					prevPage.$vm.goodCarData.pageNum = 1;
+				}
 				prevPage.$vm.page = 1;
 				uni.navigateBack();
 			}

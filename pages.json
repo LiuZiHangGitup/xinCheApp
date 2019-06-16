@@ -14,7 +14,7 @@
 								"fontSize" : "22px"
 							},
 							{
-								"text": "车商", 
+								"text": "信车", 
 								"fontSize":"15",
 								"float": "left",
 								"color":"#fff"
@@ -113,6 +113,12 @@
             	"navigationBarTitleText": "价格"
             }
         }
+		,{
+		    "path" : "pages/goodCarDetail/goodCarDetail",
+		    "style" : {
+		    	"navigationBarTitleText": "好车详情"
+		    }
+		}
         ,{
             "path" : "pages/carInformation/carInformation",
             "style": {
@@ -150,6 +156,45 @@
 				"navigationBarTitleText": "车辆详情"
 			}
         }
+        ,{
+            "path" : "pages/noticeList/noticeList",
+			"style" : {
+				"navigationBarTitleText": "公告列表"
+			}
+        },{
+            "path" : "pages/myMsg/myMsg",
+            "style" : {
+				"navigationBarTitleText": "我的消息",
+				"enablePullDownRefresh": true
+			}
+        }
+        ,{
+            "path" : "pages/myMsgInfo/myMsgInfo",
+            "style" : {
+				"navigationBarTitleText": "消息详情"
+			}
+        }
+        ,{
+            "path" : "pages/weiDian/weiDian",
+            "style" : {
+				"navigationBarTitleText": "微店",
+				"app-plus":{
+					"titleNView" : {
+						"buttons" : [
+							{
+								"type":"share"
+							}
+						]
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/quanWangCheYuan/quanWangCheYuan",
+            "style" : {
+				"navigationBarTitleText": "全网车源"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -160,7 +205,7 @@
 	"tabBar":{
 		"color":"#909399",
 		"selectedColor":"#4682B4",
-		"borderStyle":"#108ee9",
+		"borderStyle":"white",
 		"backgroundColor":"#FFFFFF",
 		"list":[
 			{
