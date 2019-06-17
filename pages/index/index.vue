@@ -218,7 +218,8 @@
 			</view>
 			<view 
 				class="headChild" 
-				@tap="$goWindow('../vehicleSource/vehicleSource?paiXu=最近入库&shangjia=1')">
+				@tap="$goWindow('../vehicleSource/vehicleSource?paiXu=最近入库&shangjia=1')" 
+				v-if="$qx('upCars')">
 				<image src="../../static/index/nowCarNum.png" mode=""></image><br>
 				<text>上架车辆</text>
 			</view>

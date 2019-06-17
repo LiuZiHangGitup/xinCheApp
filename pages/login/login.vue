@@ -1,19 +1,115 @@
-
+<style scoped>
+	#login{
+		font-size: 30upx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding-top: 50upx;
+		box-sizing: border-box;
+	}
+	.login-img{
+		width: 200upx;
+		height: 200upx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 30upx;
+	}
+	.login-img image{
+		width: 100%;
+		height: 100%;
+	}
+	.login-number{
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center; 
+		margin-top: 30upx;
+	}
+	.inp_box{
+		width: 500upx;
+		height: 70upx;
+		margin-top: 20upx;
+		display: flex;
+		transition: 0.3s all ease;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.border_bottom{
+		border-bottom: 6upx solid #E8E8E8;
+	}
+	.inp_box:first-child{
+		margin-top: 30upx;
+	}
+	.inp_box:last-child{
+		margin-top: 60upx;
+		height: 100upx;
+	}
+	.inp_box>input{
+		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
+		flex: 0.85;
+	}
+	.inp_box>image{
+		flex: 0.08;
+		height: 40upx;
+	}
+	.input_choose{
+		border-bottom: 6upx solid #108EE9 !important;
+	}
+	.inp_end{
+		width: 500upx;
+		height: 90upx;
+		margin-top: 50upx;
+	}
+	.inp_end>button{
+		width: 100%;
+		height: 100%;
+		border-radius: 45upx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 26upx;
+	}
+	.end_phone{
+		position: fixed;
+		bottom: 0upx;
+		left: 0upx;
+		right: 0upx;
+		height: 100upx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #108EE9;
+		font-size: 35upx;
+		font-weight: bold;
+	}
+	.end_phone>image{
+		width: 35upx;
+		height: 35upx;
+		margin-right: 15upx;
+	}
+</style>
 <template>
-	<view id="login" :style="loginStyle">
-		<view class="loginLogo">
+	<view id="login">
+		<view class="login-img">
 			<image src="../../static/loginLogo.png"></image>
 		</view>
-		<view class="loginForm">
-			<view class="userName">
-				<input type="text"  placeholder="请输入用户名" v-model="username" />
-			</view>
-			<view class="userPassword">
-				<input type="password" placeholder="请输入密码" v-model="password" />
-			</view>
+		<view :class="[indexState == 0?'input_choose':'','inp_box','border_bottom']"  @tap="chooseIndex(0)">
+			<image src="../../static/userName.png" mode=""></image>
+			<input type="text" placeholder="请输入账号" :placeholder-style="placeholderStyle" v-model="username"/>
 		</view>
-		<view class="loginSubmit">
-			<button type="primary" @tap="loginApi()">登录</button>
+		<view :class="[indexState == 1?'input_choose':'','inp_box','border_bottom']" @tap="chooseIndex(1)">
+			<image src="../../static/passWord.png" mode=""></image>
+			<input type="password" placeholder="请输入密码" :placeholder-style="placeholderStyle" v-model="password" />
+		</view>
+		<view class="inp_end">
+			<button class="login-button" type="primary"  @tap="loginApi()">登陆</button>
+		</view>
+		<view class="end_phone" @tap="$goPhone('010-5226-9086')">
+			<image src="../../static/phone.png" mode=""></image>
+			010-5226-9086
 		</view>
 	</view>
 </template>
@@ -25,10 +121,15 @@
 			return{
 				username: this.$store.state.userName,
 				password: this.$store.state.userPassword,
-				loginStyle:""
+				loginStyle:"",
+				indexState:'0',
+				placeholderStyle:'letter-spacing: 3upx; color:#939393'
 			}
 		},
 		methods:{
+			chooseIndex(index){
+				this.indexState = index;
+			},
 			// 用户登陆
 			async loginApi(){
 				if(this.username == ''){
@@ -124,54 +225,3 @@
 		}
 	}
 </script>
-<style scoped>
-	#login{
-			width: 750upx;
-			box-sizing: border-box;
-	}
-	.loginLogo{
-		width: 30%;
-		height: 200upx;
-		margin: 50upx auto;
-		border-radius: 20upx;
-	}
-	.loginLogo image{
-		width: 100%;
-		height: 100%;
-		border-radius: 20upx;
-	}
-	.loginForm{
-		width: 750upx;
-		margin-top: 50upx;
-	}
-	.loginForm view{
-		width: 60%;
-		margin: 10upx auto;
-		height: 70upx;
-		padding: 10upx auto;
-		box-sizing: border-box;
-		border-bottom: 2upx solid #0066FF;
-	}
-	.loginForm view input{
-		font-size: 30upx;
-		display: inline-block;
-		vertical-align: bottom;
-		margin-left: 2%;
-		padding: 0upx 15upx;
-	}
-	.loginSubmit{
-		width: 750upx;
-		height: 70upx;
-		margin-top: 50upx;
-	}
-	.loginSubmit button{
-		width: 60%;
-		margin: 0 auto;
-		letter-spacing: 5upx;
-		transition: 0.3s all ease;
-		background-color: #108ee9;
-	}
-	.loginSubmit button:active{
-		background: #21BFFF;
-	}
-</style>

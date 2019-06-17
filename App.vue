@@ -4,7 +4,8 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
-			this.$getToken()
+			// 页面初始化检测tocken是否存在
+			this.$getToken();
 		},
 		onHide: function() {
 			console.log('App Hide')

@@ -26,7 +26,10 @@
 			
 		},
 		{
-		    "path" : "pages/login/login" 
+		    "path" : "pages/login/login",
+		    "style" : {
+		    	"navigationBarTitleText": "用户登录"
+		    }
 		},
 		{
 			"path" : "pages/vehicleSource/vehicleSource",

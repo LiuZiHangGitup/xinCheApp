@@ -184,7 +184,7 @@
 			<view class="footChild" @tap="goLieBiao()">
 				<view class="footChildLeft">
 					<image src="../../static/statistics/yiYuDing.png"></image>
-					<text>已售出</text>
+					<text>已上架</text>
 				</view>
 				<view></view>
 				<view class="footChildRight">{{ dateData.reservenum }}</view>

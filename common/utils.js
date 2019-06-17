@@ -1,12 +1,10 @@
 // const baseUrl = 'http://192.168.0.222:8083/xinche';
 // const baseUrl = 'http://192.168.0.226:8383/xinche';
 // const baseUrl = 'http://192.168.0.250:8383/xinche';
-const baseUrl = 'http://192.168.0.254:8383/xinche';
+//const baseUrl = 'http://192.168.0.254:8383/xinche';
 // const baseUrl = 'http://192.168.0.254:8484/xinche';
-
-
-// 上传图片地址
-const uploadImageUrl = 'http://192.168.0.254:8383/xinche/upload/multipartFile'
+const baseUrl = 'http://192.168.0.250:8383/xinche';
+const uploadImageUrl = 'http://192.168.0.254:8383/xinche/upload/multipartFile';
 // const uploadImageUrl = 'http://192.168.0.250:8383/xinche/upload/multipartFile'
 // request 封装  后期修改  uni.request 本身自带Promise
 let request = (url,params,type) => {

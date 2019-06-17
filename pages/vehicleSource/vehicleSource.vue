@@ -3,179 +3,166 @@
 	width: 750upx;
 	background-color: #f3f3f3;
 }
-.carLists{
+.vehicleSourceBody{
+	width: 750upx;
+}
+
+.top_select_list{
+	display: flex;
 	width: 100%;
-	height: 200upx;
-	padding: 20upx 0;
-	background-color: #FFFFFF;
-	border-bottom: 10upx solid #f3f3f3;
+	align-items: center;
+	flex-wrap: nowrap;
+	font-size: 25upx;
+	background: white;
+	justify-content: center;
+	border-bottom:1upx solid #eee;
 }
-.carListsLeft{
-	width: 45%;
-	float: left;
-	margin-left: 20upx;
+.top_select_item{
+	width: 20%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20upx 0 20upx 0;
 }
-.carListsLeft image{
+.top_select_item view:nth-child(2){
+	width: 20upx;
+	height: 20upx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.top_select_item view:nth-child(2) image{
 	width: 100%;
-	height: 200upx;
+	height: 60%;
+	padding-left: 5upx;
 }
-.carListsRight{
-	float: right;
-	width: 47.5%;
-	margin-right: 2%;
-}
-.carListsRight text{
+/* 车辆管理列表 */
+.cars_list{
+	width: 100%;
 	font-size: 30upx;
-	text-overflow: -o-ellipsis-lastline;
+	background: white;
+}
+.cars_item{
+	display: flex;
+	padding: 20upx;
+}
+.cars_item_img{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45%;
+	height: 200upx;
+}
+.cars_item_img image{
+	width: 100%;
+	height: 100%;
+	border-radius: 10upx;
+}
+.cars_item_right{
+	display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+	padding-left: 10upx;
+	width: 50%;
+}
+.cars_item_content{
+	color: #999;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	line-clamp: 2;
+	-webkit-line-clamp:2;
 	-webkit-box-orient: vertical;
+	font-size: 28upx;
 }
-.carListsRight .chengShi{
-	display: block;
-	color: #909399;
-	margin: 4.5% 0;
+.cars_item_right_bottom{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: #108EE9;
 }
-.carListsRight .jiaGe{
-	overflow: hidden;
-	text-overflow:ellipsis;
-	white-space: nowrap;
-	color: #21bfff;
-	display: inline-block;
-	width: 80%;
-}
-.carListsRight view{
-	display: inline-block !important;
-	width: 150upx;
-	height: 50upx;
-	float: right;
-	margin-top: -50upx;
-	margin-right: 20upx;
+.cars_item_btn{
+	color: white;
+	background-color: rgb(64, 158, 255) !important;
+	padding: 8upx 25upx 8upx 25upx;
+	border-radius: 10upx;
+	font-size: 25upx;
 	position: relative;
 }
-.carListsRight view button{
-	width: 150upx;
-	height: 50upx;
-	font-size: 20upx;
-}
-.carListsRight view view{
-	width: 150upx;
-	height: 150upx;
-	background-color: #FFFFFF;
+.cars_item_btn_box{
 	position: absolute;
-	top: 100upx;
+	width: 100%;
 	left: 0upx;
-	border-bottom: 1upx solid #E8E8E8;
-	border-left: 1upx solid #E8E8E8;
-	border-right: 1upx solid #E8E8E8;
+	height: 150upx;
 	transition: 0.3s all ease;
+	transform: scaleY(0);
 }
-.carListsRight view view text{
-	display: block;
-	text-align: center;
-	font-size: 20upx;
+.cars_item_btn_box>view{
+	width: 100%;
 	height: 50upx;
-	line-height: 50upx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #FFFFFF;
+	color: #000000;
 	border-bottom: 1upx solid #E8E8E8;
+	box-sizing: border-box;
+	border: 1upx solid #E8E8E8;
+	border-top: none;
 }
-.carListsRight view view text:last-child{
-	border:none;
+.cars_item_btn_box_choose{
+	transform: scaleY(1);
 }
 .goodCarNum{
-	width: 750upx;
-	text-align: center;
-	color: #909399;
-	clear: both;
-	background: #FFFFFF;
-	font-size: 30upx;
-	padding: 20upx 0;
-}
-.vehicleSourceTop{
-	width: 750upx;
-	height: 70upx;
-	background: #FFFFFF;
-	z-index: 2;
-	position: fixed;
-	left: 0;
-	right: 0;
 	display: flex;
-	justify-content: space-around;
-	line-height: 70upx;
-}
-.vehicleSourceBody{
-	width: 750upx;
-	padding-top: 140upx;
-}
-.vehicleSourceTop .vehicleSourceTopChild text{
-	font-size: 26upx;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-.vehicleSourceTopChildImage{
-	width: 15upx;
-	height: 10upx;
-	vertical-align: middle;
-	margin-left: 10upx;
-	transition: 0.3s all ease;
-}
-.vehicleSourceBody-Item{
-	background-color: #E8E8E8;
-	width: 750upx;
-	height: 70upx;
-	line-height: 70upx;
-	font-size: 26upx;
-	padding-left: 30upx;
-	box-sizing: border-box;
-	position: fixed;
-	top: 70upx;
-	left: 0upx;
-	ight: 0upx;
-	z-index: 10;
+	justify-content: center;
+	align-items: center;
+	background-color: #FFFFFF;
+	color: #939393;
+	font-size: 28upx;
+	height: 80upx;
 }
 </style>
 
 <template>
 	<view id="vehicleSource">
-		<view class="vehicleSourceTop">
-			<view class="vehicleSourceTopChild" @tap="$goWindow('../paiXu/paiXu')">
-				<text>{{ paiXu }}</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
+		<view class="top_select_list">
+			<view class="top_select_item" @tap="$goWindow('../paiXu/paiXu')">
+				<view>{{ paiXu }}</view>
+				<view><image src="../../static/jianTou.png"></image></view>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="$goWindow('../carBrand/carBrand')">
-				<text>品牌</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
+			<view class="top_select_item" @tap="$goWindow('../carBrand/carBrand')">
+				<view>品牌</view>
+				<view><image src="../../static/jianTou.png"></image></view>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="$goWindow('../carPrice/carPrice')">
-				<text>价格</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
+			<view class="top_select_item" @tap="$goWindow('../carPrice/carPrice')">
+				<view>价格</view>
+				<view><image src="../../static/jianTou.png"></image></view>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="$goWindow('../carState/carState')">
-				<text>{{ carStateChoose }}</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
+			<view class="top_select_item" @tap="$goWindow('../carState/carState')">
+				<view>{{ carStateChoose }}</view>
+				<view><image src="../../static/jianTou.png"></image></view>
 			</view>
-			<view class="vehicleSourceTopChild" @tap="zwkf()">
-				<text>筛选</text><image class="vehicleSourceTopChildImage" src="../../static/jianTou.png" mode=""></image>
+			<view class="top_select_item" @tap="zwkf()">
+				<view>筛选</view>
+				<view><image src="../../static/jianTou.png"></image></view>
 			</view>
 		</view>
-		<view class="vehicleSourceBody">
-			<view class="vehicleSourceBody-Item">
-				<text>共查出<text style="color:#F56C6C;">{{ allCarTotal }}</text>条数据</text>
-			</view>
-			<view class="carLists" v-for="(item,index) in carList" :key="index">
-				<view class="carListsLeft">
-					<image :src="item.coverUrl[0]" @tap="goInfo(item)"></image>
-				</view>
-				<view class="carListsRight">
-					<text>{{item.seriesName}}</text>
-					<text class="chengShi" style="font-size: 26upx !important;">{{item.styleName}}</text>
-					<!-- {{item.typeId}} -->
-					<text class="jiaGe">{{ item.onlinePriceCents }}万</text> 
-					<view @click="chooseStateOpen(index)">
-						<button style="background-color: #409EFF !important; color: #FFFFFF;">{{ item.stateText }}</button>
-						<view :style="item.chooseStateStyle">
-							<text @tap="setCarState(item.id,0)">已在库</text>
-							<text @tap="setCarState(item.id,1)">已上架</text>
-							<text @tap="setCarState(item.id,2)">已出售</text>
+		<view class="cars_list">
+			<view class="cars_item" v-for="(item,index) in carList" :key="index">
+				<view class="cars_item_img"><image :src="item.coverUrl[0]" @tap="goInfo(item)"></image></view>
+				<view class="cars_item_right">
+					<view>{{item.seriesName}}</view>
+					<view  class="cars_item_content">{{item.styleName}}</view>
+					<view  class="cars_item_content">{{ item.createdAt }}年&nbsp;{{ item.mileage }}万公里</view>
+					<view  class="cars_item_right_bottom">
+						<view>{{ item.onlinePriceCents }}万</view>
+						<view class="cars_item_btn" @tap="chooseStateOpen(index)">
+							{{ item.stateText }}
+							<view :class="[chooseIndex == index?'cars_item_btn_box_choose':'','cars_item_btn_box']">
+								<view @tap="setCarState(item.id,0,index)">已在库</view>
+								<view @tap="setCarState(item.id,1,index)">已上架</view>
+								<view @tap="setCarState(item.id,2,index)">已出库</view>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -192,6 +179,8 @@
 	export default {
 		data() {
 			return {
+				// 当前修改的车辆Index
+				chooseIndex: '==',
 				orderNum:'',
 				retailPrice: '',
 				styleName: '',
@@ -264,7 +253,7 @@
 				this.$toast('暂未开放',false);
 			},
 			// 修改车辆状态
-			async setCarState(id,index){
+			async setCarState(id,index,Index){
 				try{
 					this.$loading()
 					let params = {id:id,state:index};
@@ -283,11 +272,8 @@
 			},
 			// 修改状态显示或关闭
 			chooseStateOpen(index){
-				if(this.carList[index].chooseStateStyle == 'opacity:1;z-index:2;'){
-					this.carList[index].chooseStateStyle = 'opacity:0;z-index:-10;';
-				}else{
-					this.carList[index].chooseStateStyle = 'opacity:1;z-index:2;';	
-				}
+				this.chooseIndex == index?this.chooseIndex = index+'==' : this.chooseIndex = index;;
+				
 			},
 			// 获取车辆列表
 			async getAllCars(){
@@ -306,17 +292,17 @@
 							return;
 						}
 						if(resData.code === 200){
-							for(let i in resData.result.list){
-								resData.result.list[i].chooseStateStyle = 'opacity:0;z-index:-10;';
-								resData.result.list[i].coverUrl = resData.result.list[i].coverUrl.split(',');
-								if(resData.result.list[i].state == 0){
-									resData.result.list[i].stateText = '已在库';
-								}else if(resData.result.list[i].state == 1){
-									resData.result.list[i].stateText = '已上架';
-								}else if(resData.result.list[i].state == 2){
-									resData.result.list[i].stateText = '已售出';
+							let updateDate = (val) => {
+								val.coverUrl = val.coverUrl.split(',');
+								val.createdAt = new Date(val.createdAt).getFullYear();
+								if(val.state == 0){
+									val.stateText = '已在库';
+								}else if(val.state == 1){
+									val.stateText = '已上架';
+								}else if(val.state == 2){
+									val.stateText = '已出库';
 								}
-								if(i == resData.result.list.length - 1){
+								if(val.id == resData.result.list[resData.result.list.length - 1].id){
 									if(this.goodCarData.pageNum == 1){
 										this.carList = resData.result.list;
 									}else{
@@ -327,9 +313,10 @@
 									}else{
 										this.ifHaveGoodCar = '上拉加载';
 									}
-									uni.hideLoading()
 								}
 							}
+							resData.result.list.forEach(updateDate);
+							uni.hideLoading()
 						}else{
 							this.$toast(resData.message);
 						}
