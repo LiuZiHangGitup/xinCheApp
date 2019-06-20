@@ -380,7 +380,7 @@
 				</view>
 				<view class="addDataChildCenters">
 					<view style="padding-right: 15upx;">
-						<input v-model="xingShiLiCheng" type="text" placeholder-style="text-align:right;"placeholder="请填写行驶里程" maxlength="17" />
+						<input v-model="xingShiLiCheng" type="text" placeholder-style="text-align:right;" placeholder="请填写行驶里程" maxlength="17" />
 					</view>
 					<view>
 						万公里<image src="../../static/addCar/go.png" style="width: 20upx;height: 20upx;"></image>
@@ -413,7 +413,7 @@
 						<text>钥匙数量</text>
 					</view>
 					<view class="addDataChildCenters">
-						<view style="padding-right: 15upx;"><input  v-model="yaoShiShuLiang" placeholder-style="text-align:right;"placeholder="请填写钥匙数量" /></view>
+						<view style="padding-right: 15upx;"><input  v-model="yaoShiShuLiang" placeholder-style="text-align:right;" placeholder="请填写钥匙数量" /></view>
 						<view><image src="../../static/addCar/go.png" style="width: 20upx;height: 20upx;"></image></view>
 					</view>
 				</view>
@@ -427,7 +427,7 @@
 						<text>过户次数</text>
 					</view>
 					<view class="addDataChildCenters">
-						<view style="padding-right: 15upx;"><input  v-model="guoHuCiShu" placeholder-style="text-align:right;"placeholder="请输入过户次数" /></view>
+						<view style="padding-right: 15upx;"><input  v-model="guoHuCiShu" placeholder-style="text-align:right;" placeholder="请输入过户次数" /></view>
 						<view><image src="../../static/addCar/go.png" style="width: 20upx;height: 20upx;"></image></view>
 					</view>
 				</view>
@@ -974,6 +974,15 @@ export default {
 		}
     },
 	onLoad(events){	
+		this.getAllMarket();
+		this.pinPaiXingHao = events.carName;
+		if(this.carImg[0] == '../../static/addCar/addImg.png'){
+			this.ifShowImg = true;
+		}else{
+			this.ifShowImg = false;
+		}
+	},
+	onShow() {
 		this.getAllMarket();
 		this.pinPaiXingHao = events.carName;
 		if(this.carImg[0] == '../../static/addCar/addImg.png'){

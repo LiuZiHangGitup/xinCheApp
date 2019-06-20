@@ -73,10 +73,7 @@
 		font-size: 26upx;
 	}
 	.end_phone{
-		position: fixed;
-		bottom: 0upx;
-		left: 0upx;
-		right: 0upx;
+		margin-top: 500upx;
 		height: 100upx;
 		display: flex;
 		align-items: center;
@@ -200,6 +197,7 @@
 					this.$toast('请求失败');
 				}
 			},
+			// 处理用户权限
 			async getUserQx(){
 				let resData = await getQx();
 				if(resData.code === 200){

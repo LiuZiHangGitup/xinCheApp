@@ -217,7 +217,7 @@
 								name: 'file',
 								formData: {},
 								async success(resData) {
-									if (resData.data.code == 200) {
+									if (JSON.parse(resData.data).code == 200) {
 										var imgJson = {
 											url: JSON.parse(resData.data).message,
 											testState: false,

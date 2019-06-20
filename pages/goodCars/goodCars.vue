@@ -1238,6 +1238,7 @@
 							this.ifHaveGoodCar = '上拉加载';
 							if(this.goodCarData.pageNum == 1){
 								this.goodCarList = resData.result.list;
+								console.log(this.goodCarList);
 							}else{
 								this.goodCarList = this.goodCarList.concat(resData.result.list);
 							}
